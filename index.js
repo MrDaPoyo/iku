@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+var db = require('./db');
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Define a route
 app.get('/', (req, res) => {
     res.render('index', { title: 'Home' });
+});
+
+app.post('/auth/login', (req, res) => {
+    
 });
 
 // Start the server
