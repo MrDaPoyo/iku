@@ -13,4 +13,15 @@ db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, content TEXT, post_id INTEGER, user_id INTEGER)');
 });
 
-module.exports = db;
+function registerUser(name, email, password) {
+    db.run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password], (err) => {
+        if (err) {
+            console.error(err.message);
+        }
+    });
+}
+
+module.exports = {
+    db,
+    registerUser
+};
