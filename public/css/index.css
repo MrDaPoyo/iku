@@ -16,7 +16,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    overflow: hidden;
+    width: 100vw;
 }
 
 input {
@@ -38,14 +38,14 @@ button {
 }
 
 .stripes {
-    width: 100vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0;
+    background:url(/images/Stripes.svg);
     height: 5vh;
-    max-height: 50px;
+    width: 100vw;
+    background-repeat: repeat-x;  
+    background-size: auto 100%;
     position: fixed;
-    top: 0;
+    top: 10px;
     left: 0;
+    margin: 5px 0;
+    z-index: 1000;
 }
