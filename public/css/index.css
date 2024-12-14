@@ -38,7 +38,7 @@ button {
 }
 
 .stripes {
-    background:url(/images/Stripes.svg);
+    background: url(/images/Stripes.svg);
     height: 5vh;
     width: 100vw;
     background-repeat: repeat-x;  
