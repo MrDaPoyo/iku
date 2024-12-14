@@ -1,0 +1,51 @@
+:root {
+    --green: #3EB081;
+    --red: #E41E21;
+    --orange: #F09C1C;
+    --blue: #0C85EC;
+    --white: #FAF9F6;
+    --black: #1E1E1E;
+}
+
+body {
+    background-color: var(--white);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid var(--black);
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid var(--black);
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.stripes {
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    height: 5vh;
+    max-height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
