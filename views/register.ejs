@@ -4,16 +4,16 @@
     <h2>Register</h2>
     <form action="/auth/register" method="POST"></form>
         <div class="form-group">
-            <label for="username">Username:</label>
+            <label for="username">Username (Cannot be longer than 15 characters):</label>
             <input type="text" id="username" name="username" required>
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <div class="form-group">
+        <div class="form-group normalSized">
             <label for="genre">Favorite Genre:</label>
-            <input type="text" id="genre" name="genre" required>
+            <input type="text" id="genre" name="genre" class="normalSized" required>
         </div>
         <button type="submit">Register</button>
     </form>

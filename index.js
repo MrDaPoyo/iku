@@ -67,6 +67,27 @@ app.post('/auth/login', async (req, res) => {
     }
 });
 
+app.get('/auth/register', (req, res) => {
+    res.render('register', { title: 'Register' });
+});
+
+app.post('/auth/register', (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        res.redirect('/auth/register?msg=Please fill in all the fields');
+    }
+    if (password.length < 15) {
+        res.redirect("/auth/register?msg=Password can't be longer than 15 characters");
+    }
+    db.registerUser(username, password).then((result) => {
+        if (result === 'success') {
+            res.redirect('/auth/login?msg=Registered successfully, please login to access your account!');
+        } else {
+            res.redirect('/auth/login?msg=' + result);
+        }
+    });
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
