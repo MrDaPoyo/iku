@@ -72,18 +72,24 @@ app.get('/auth/register', (req, res) => {
 });
 
 app.post('/auth/register', (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-        res.redirect('/auth/register?msg=Please fill in all the fields');
+    const { username, password, genre } = req.body;
+    if (!username || !password || !genre) {
+        return res.redirect('/auth/register?msg=Please fill in all the fields');
     }
-    if (password.length < 15) {
-        res.redirect("/auth/register?msg=Password can't be longer than 15 characters");
+    if (username.length > 15) {
+        return res.redirect("/auth/register?msg=Username can't be longer than 15 characters");
     }
-    db.registerUser(username, password).then((result) => {
-        if (result === 'success') {
+    if (password.length < 8) {
+        return res.redirect("/auth/register?msg=Password must be at least 8 characters long");
+    }
+    if (genre.length > 10) {
+        return res.redirect("/auth/register?msg=Genre can't be longer than 10 characters");
+    }
+    db.registerUser(username, password, genre).then((result) => {
+        if (result) {
             res.redirect('/auth/login?msg=Registered successfully, please login to access your account!');
         } else {
-            res.redirect('/auth/login?msg=' + result);
+            res.redirect('/auth/register?msg=' + result);
         }
     });
 });

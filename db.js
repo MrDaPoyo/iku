@@ -17,13 +17,13 @@ db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS playlist_tracks (playlist_id INTEGER, track_id INTEGER, PRIMARY KEY (playlist_id, track_id), FOREIGN KEY (playlist_id) REFERENCES playlists(id), FOREIGN KEY (track_id) REFERENCES tracks(id))');
 });
 
-function registerUser(name, password) {
-    if (!name || !password) {
+function registerUser(name, password, favGenre) {
+    if (!name || !password || !favGenre) {
         return 'Please fill in all the fields';
     }
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
-    db.run('INSERT INTO users (name, password) VALUES (?, ?)', [name, hash], (err) => {
+    db.run('INSERT INTO users (name, password, fav_genre) VALUES (?, ?, ?)', [name, hash, favGenre], (err) => {
         if (err) {
             console.error(err.message);
             return err.message;
