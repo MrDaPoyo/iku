@@ -22,10 +22,6 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     height: 100vh;
     width: 100vw;
 }
@@ -55,17 +51,33 @@ button {
     background-color: var(--white);
 }
 
-.stripes {
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+
+.header .stripes {
     background: url(/images/Stripes.svg);
     height: 5vh;
-    width: 100vw;
+    width: 100%;
     background-repeat: repeat-x;  
     background-size: auto 100%;
-    margin-bottom: 20px;
-    position: fixed;
-    top: 10px;
+    margin-bottom: 5px;
+    position: relative;
+    top: 0;
     left: 0;
     z-index: 1000;
+}
+
+.header .message {
+    border-top: 1px solid var(--black);
+    border-bottom: 1px solid var(--black);
+    width: 100%;
+    text-align: center;
 }
 
 .login {
@@ -74,6 +86,9 @@ button {
     border-radius: 5px;
     background-color: var(--light-grey);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-inline: auto;
+    margin-top: 5vh;
+    max-width: 50vw;
 }
 
 .login .logo {
@@ -84,6 +99,34 @@ button {
     background-repeat: no-repeat;
 }
 
-footer {
+.footer {
     margin-top: 5px;
+}
+
+.red {
+    background-color: var(--red);
+}
+
+.green {
+    background-color: var(--green);
+}
+
+.orange {
+    background-color: var(--orange);
+}
+
+.blue {
+    background-color: var(--blue);
+}
+
+.white {
+    background-color: var(--white);
+}
+
+.light-grey {
+    background-color: var(--light-grey);
+}
+
+.black {
+    background-color: var(--black);
 }

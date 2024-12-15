@@ -8,4 +8,11 @@
     <link rel="icon" href="/images/Favicon.png">
 </head>
 <body>
-    <div class="stripes" width="100vw"></div>
+    <header class="header">
+        <div class="stripes"></div>
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="message orange">
+                <p><%= message %></p>
+            </div>
+        <% } %>
+    </header>   

@@ -1,8 +1,8 @@
 <%- include('header') %>
 <div class="login">
     <img src="/images/FullLogo.svg" alt="Iku logo" class="logo">
-    <h2>Login</h2>
-    <form action="/login" method="POST">
+    <h2>Register</h2>
+    <form action="/auth/register" method="POST"></form>
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -11,7 +11,11 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <button type="submit">Login</button>
+        <div class="form-group">
+            <label for="genre">Favorite Genre:</label>
+            <input type="text" id="genre" name="genre" required>
+        </div>
+        <button type="submit">Register</button>
     </form>
 </div>
 <%- include('footer') %>
