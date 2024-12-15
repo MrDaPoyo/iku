@@ -15,8 +15,8 @@ const generalMiddleware = (req, res, next) => {
 };
 
 const loggedInMiddleware = (req, res, next) => {
-    if (req.cookies.user) {
-        jwt.verify(req.cookies.user, process.env.AUTH_SECRET, (err, decoded) => {
+    if (req.cookies.auth) {
+        jwt.verify(req.cookies.auth, process.env.AUTH_SECRET, (err, decoded) => {
             if (err) {
                 res.redirect('/auth/login');
             } else {
@@ -24,6 +24,7 @@ const loggedInMiddleware = (req, res, next) => {
                     if (result) {
                         next();
                     } else {
+                        res.clearCookie('auth');
                         res.redirect('/auth/login');
                     }
                 });
@@ -32,6 +33,14 @@ const loggedInMiddleware = (req, res, next) => {
         next();
     } else {
         res.redirect('/auth/login');
+    }
+}
+
+const notLoggedInMiddleware = (req, res, next) => {
+    if (!req.cookies.auth) {
+        next();
+    } else {
+        res.redirect('/');
     }
 }
 
@@ -51,27 +60,27 @@ app.get('/', loggedInMiddleware, (req, res) => {
     res.render('index', { title: 'Home' });
 });
 
-app.get('/auth/login', (req, res) => {
+app.get('/auth/login', notLoggedInMiddleware, (req, res) => {
     res.render('login', { title: 'Login' });
 });
 
-app.post('/auth/login', async (req, res) => {
+app.post('/auth/login', notLoggedInMiddleware, async (req, res) => {
     const { username, password } = req.body;
     const result = await db.loginUser(username, password);
     if (typeof result === 'number') {
         const token = jwt.sign({ id: result }, process.env.AUTH_SECRET, { expiresIn: '1h' });
-        res.cookie('user', token, { httpOnly: true });
+        res.cookie('auth', token, { httpOnly: true });
         res.redirect('/');
     } else {
         res.redirect("/auth/login?msg=" + result);
     }
 });
 
-app.get('/auth/register', (req, res) => {
+app.get('/auth/register', notLoggedInMiddleware, (req, res) => {
     res.render('register', { title: 'Register' });
 });
 
-app.post('/auth/register', (req, res) => {
+app.post('/auth/register', notLoggedInMiddleware, async (req, res) => {
     const { username, password, genre } = req.body;
     if (!username || !password || !genre) {
         return res.redirect('/auth/register?msg=Please fill in all the fields');
@@ -85,13 +94,19 @@ app.post('/auth/register', (req, res) => {
     if (genre.length > 10) {
         return res.redirect("/auth/register?msg=Genre can't be longer than 10 characters");
     }
-    db.registerUser(username, password, genre).then((result) => {
+    if (await db.checkUserById(username)) {
+        return res.redirect("/auth/register?msg=Username already taken");
+    }
+    try {
+        const result = await db.registerUser(username, password, genre);
         if (result) {
             res.redirect('/auth/login?msg=Registered successfully, please login to access your account!');
         } else {
-            res.redirect('/auth/register?msg=' + result);
+            res.redirect('/auth/register?msg=Registration failed, please try again.');
         }
-    });
+    } catch (error) {
+        res.redirect(`/auth/register?msg=${error}`);
+    }
 });
 
 // Start the server

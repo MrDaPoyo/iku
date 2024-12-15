@@ -17,20 +17,52 @@ db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS playlist_tracks (playlist_id INTEGER, track_id INTEGER, PRIMARY KEY (playlist_id, track_id), FOREIGN KEY (playlist_id) REFERENCES playlists(id), FOREIGN KEY (track_id) REFERENCES tracks(id))');
 });
 
-function registerUser(name, password, favGenre) {
+
+async function checkUserById(id) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM users WHERE id = ?', [id], (err, row) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
+function checkUserByUsername(username) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
+async function registerUser(name, password, favGenre) {
     if (!name || !password || !favGenre) {
-        return 'Please fill in all the fields';
+        return Promise.resolve('Please fill in all the fields');
     }
     const saltRounds = 10;
     const hash = bcrypt.hashSync(password, saltRounds);
-    db.run('INSERT INTO users (name, password, fav_genre) VALUES (?, ?, ?)', [name, hash, favGenre], (err) => {
-        if (err) {
-            console.error(err.message);
-            return err.message;
-        } else {
-            console.log('User registered successfully');
-            return 'User registered successfully';
-        }
+    return new Promise((resolve, reject) => {
+        db.run('INSERT INTO users (username, password, fav_genre) VALUES (?, ?, ?)', [name, hash, favGenre], async (err) => {
+            if (err) {
+                console.error(err.message);
+                reject(err.message);
+            } else {
+                console.log('User registered successfully');
+                try {
+                    const user = await checkUserByUsername(name);
+                    resolve(user);
+                } catch (error) {
+                    reject(error.message);
+                }
+            }
+        });
     });
 }
 
@@ -57,18 +89,6 @@ async function loginUser(username, password) {
     }
 }
 
-async function checkUserById(id) {
-    return new Promise((resolve, reject) => {
-        db.get('SELECT * FROM users WHERE id = ?', [id], (err, row) => {
-            if (err) {
-                reject(false);
-            } else {
-                resolve(row);
-            }
-        });
-    });
-}
-
 function comparePasswords(password, hash) {
     return bcrypt.compare(password, hash);
 }
@@ -79,4 +99,5 @@ module.exports = {
     loginUser,
     comparePasswords,
     checkUserById,
+    checkUserByUsername,
 };
