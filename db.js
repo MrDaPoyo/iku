@@ -1,4 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcrypt');
 
 var db = new sqlite3.Database('iku.db', (err) => {
     if (err) {
@@ -14,14 +15,28 @@ db.serialize(() => {
 });
 
 function registerUser(name, email, password) {
-    db.run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password], (err) => {
+    if (!name || !email || !password) {
+        return 'Please fill in all the fields';
+    }
+    const saltRounds = 10;
+    const hash = bcrypt.hashSync(password, saltRounds);
+    db.run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, hash], (err) => {
         if (err) {
             console.error(err.message);
+            return err.message;
+        } else {
+            console.log('User registered successfully');
+            return 'User registered successfully';
         }
     });
 }
 
+function comparePasswords(password, hash) {
+    return bcrypt.compare(password, hash);
+}
+
 module.exports = {
     db,
-    registerUser
+    registerUser,
+    comparePasswords
 };
