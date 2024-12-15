@@ -7,6 +7,11 @@
     --black: #1E1E1E;
 }
 
+@font-face {
+    font-family: 'Climate Crisis';
+    src: url("/fonts/ClimateCrisis.ttf") format('truetype');
+}
+
 * {
     box-sizing: border-box;
 }
@@ -22,6 +27,11 @@ body {
     flex-direction: column;
     height: 100vh;
     width: 100vw;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Climate Crisis', sans-serif;
+    font-weight: 400;
 }
 
 input {
