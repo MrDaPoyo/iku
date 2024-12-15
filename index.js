@@ -22,6 +22,8 @@ const loggedInMiddleware = (req, res, next) => {
             } else {
                 db.checkUserById(decoded.id).then((result) => {
                     if (result) {
+                        res.locals.user = result;
+                        req.user = result;
                         next();
                     } else {
                         res.clearCookie('auth');
