@@ -43,19 +43,28 @@ async function loginUser(username, password) {
         if (row) {
             const result = await comparePasswords(password, row.password);
             if (result) {
-                console.log('User logged in successfully');
-                return 'User logged in successfully';
+                return row.id; // Return the user ID upon successful login
             } else {
-                console.log('Invalid Credentials');
                 return 'Invalid Credentials';
             }
         } else {
             return 'Invalid Credentials';
         }
     } catch (err) {
-        console.error(err.message);
         return err.message;
     }
+}
+
+async function checkUserById(id) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM users WHERE id = ?', [id], (err, row) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(row);
+            }
+        });
+    });
 }
 
 function comparePasswords(password, hash) {
@@ -66,5 +75,6 @@ module.exports = {
     db,
     registerUser,
     loginUser,
-    comparePasswords
+    comparePasswords,
+    checkUserById,
 };

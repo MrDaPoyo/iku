@@ -20,7 +20,13 @@ const loggedInMiddleware = (req, res, next) => {
             if (err) {
                 res.redirect('/auth/login');
             } else {
-                next();
+                db.checkUserById(decoded.id).then((result) => {
+                    if (result) {
+                        next();
+                    } else {
+                        res.redirect('/auth/login');
+                    }
+                });
             }
         });
         next();
@@ -52,7 +58,13 @@ app.get('/auth/login', (req, res) => {
 app.post('/auth/login', async (req, res) => {
     const { username, password } = req.body;
     const result = await db.loginUser(username, password);
-    res.redirect("/?msg=" + await result);
+    if (typeof result === 'number') {
+        const token = jwt.sign({ id: result }, process.env.AUTH_SECRET, { expiresIn: '1h' });
+        res.cookie('user', token, { httpOnly: true });
+        res.redirect('/');
+    } else {
+        res.redirect("/auth/login?msg=" + result);
+    }
 });
 
 // Start the server
