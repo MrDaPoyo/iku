@@ -83,3 +83,7 @@ button {
     background-size: contain;
     background-repeat: no-repeat;
 }
+
+footer {
+    margin-top: 5px;
+}
