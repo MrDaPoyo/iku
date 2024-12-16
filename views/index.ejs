@@ -1,4 +1,5 @@
 <%- include('header') %>
+<link rel="stylesheet" href="/css/player.css">
 <div class="dashboard">
     <div class="dashboardHeader">
         <img src="/images/FullLogo.svg" alt="Logo" class="logo">
@@ -6,14 +7,19 @@
     </div>
     <div class="audioPlayerContainer column-container">
         <div class="audioPlayer">
-            <audio controls id="audioPlayer">
+            <audio id="audioPlayer">
                 <source src="" type="audio/mpeg">
-                Your browser does not support the audio element.
+                Your browser does not support audio.
             </audio>
         </div>
         <div class="audioPlayerVisualizer">
             <canvas id="audioVisualizer" class="audioVisualizer"></canvas>
             <script src="/js/audioVisualizer.js"></script>
+        </div>
+        <div class="audioPlayerProgress">
+            <div class="progressBar">
+                <div class="progressBarFill"></div>
+            </div>
         </div>
         <div class="audioPlayerControls">
             <button id="playButton">Play</button>
