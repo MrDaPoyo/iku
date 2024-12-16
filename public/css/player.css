@@ -75,10 +75,10 @@
 }
 
 .audioPlayerVisualizer {
-    width: 100%;
+    width: 20%;
     height: 10%;
     background-color: var(--black);
-    margin-bottom: 20px;
+    margin-left: auto;
 }
 
 .audioPlayerProgress {
@@ -107,7 +107,7 @@
 .audioPlayerControls {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
 }
 
@@ -118,6 +118,7 @@
     border: 1px solid var(--white);
     border-radius: 5px;
     cursor: pointer;
+    margin: 10px;
 }
 
 .audioPlayerControls button:hover {
