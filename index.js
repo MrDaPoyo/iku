@@ -24,15 +24,14 @@ const loggedInMiddleware = (req, res, next) => {
                     if (result) {
                         res.locals.user = result;
                         req.user = result;
-                        next();
+                        return next();
                     } else {
                         res.clearCookie('auth');
-                        res.redirect('/auth/login');
+                        return res.redirect('/auth/login');
                     }
                 });
             }
         });
-        next();
     } else {
         res.redirect('/auth/login');
     }
@@ -107,7 +106,7 @@ app.post('/auth/register', notLoggedInMiddleware, async (req, res) => {
             res.redirect('/auth/register?msg=Registration failed, please try again.');
         }
     } catch (error) {
-        res.redirect(`/auth/register?msg=${error}`);
+        return res.redirect(`/auth/register?msg=${error}`);
     }
 });
 

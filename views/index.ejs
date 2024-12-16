@@ -4,5 +4,23 @@
         <img src="/images/FullLogo.svg" alt="Logo" class="logo">
         <h1 class="title">Track Player</h1>
     </div>
+    <div class="audioPlayerContainer column-container">
+        <div class="audioPlayer">
+            <audio controls id="audioPlayer">
+                <source src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        <div class="audioPlayerVisualizer">
+            <canvas id="audioVisualizer" class="audioVisualizer"></canvas>
+            <script src="/js/audioVisualizer.js"></script>
+        </div>
+        <div class="audioPlayerControls">
+            <button id="playButton">Play</button>
+            <button id="nextButton">Next</button>
+            <button id="pastButton">Past</button>
+            <button id="stopButton">Stop</button>
+        </div>
+    </div>
 </div>
 <%- include('footer') %>
