@@ -24,11 +24,16 @@ function draw() {
     let barHeight;
     let x = 0;
 
+    const gradient = canvasCtx.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop(0, 'red');
+    gradient.addColorStop(0.5, 'yellow');
+    gradient.addColorStop(1, 'green');
+    canvasCtx.fillStyle = gradient;
+
     for (let i = 0; i < bufferLength; i++) {
         barHeight = dataArray[i];
 
-        canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
-        canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+        canvasCtx.fillRect(x, canvas.height - barHeight / 3, barWidth, barHeight / 2);
 
         x += barWidth + 1;
     }
