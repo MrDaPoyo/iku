@@ -1,32 +1,35 @@
 <%- include('header') %>
-<link rel="stylesheet" href="/css/player.css">
-<div class="dashboard">
-    <div class="dashboardHeader">
-        <img src="/images/FullLogo.svg" alt="Logo" class="logo">
-        <h1 class="title">Track Player</h1>
-    </div>
-    <div class="audioPlayerContainer column-container">
-        <div class="audioPlayer">
-            <audio id="audioPlayer">
-                <source src="" type="audio/mpeg">
-                Your browser does not support audio.
-            </audio>
+    <div class="dashboard">
+        <link rel="stylesheet" href="/css/player.css">
+        <div class="dashboardHeader">
+            <img src="/images/FullLogo.svg" alt="Logo" class="logo">
+            <h1 class="title">Track Player</h1>
         </div>
-        <div class="audioPlayerVisualizer">
-            <canvas id="audioVisualizer" class="audioVisualizer"></canvas>
-            <script src="/js/audioVisualizer.js"></script>
-        </div>
-        <div class="audioPlayerProgress">
-            <div class="progressBar">
-                <div class="progressBarFill"></div>
+        <div class="mainContainer">
+            <div class="contentContainer"></div>
+            <div class="audioPlayerContainer">
+                <div class="column-container w-100">
+                    <audio id="audioPlayer">
+                        <source src="" type="audio/mpeg">
+                        Your browser does not support audio.
+                    </audio>
+                    <div class="audioPlayerProgress">
+                        <div class="progressBar">
+                            <div class="progressBarFill"></div>
+                        </div>
+                    </div>
+                    <div class="audioPlayerControls">
+                        <button id="playButton">Play</button>
+                        <button id="nextButton">Next</button>
+                        <button id="pastButton">Past</button>
+                        <button id="stopButton">Stop</button>
+                    </div>
+                </div>
+                <div class="audioPlayerVisualizer">
+                    <canvas id="audioVisualizer" class="audioVisualizer"></canvas>
+                    <script src="/js/audioVisualizer.js"></script>
+                </div>
             </div>
         </div>
-        <div class="audioPlayerControls">
-            <button id="playButton">Play</button>
-            <button id="nextButton">Next</button>
-            <button id="pastButton">Past</button>
-            <button id="stopButton">Stop</button>
-        </div>
     </div>
-</div>
-<%- include('footer') %>
+    <%- include('footer') %>
