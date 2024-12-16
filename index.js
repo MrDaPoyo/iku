@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const fs = require('fs-extra');
 
 const app = express();
 const port = 3000;
@@ -107,6 +108,16 @@ app.post('/auth/register', notLoggedInMiddleware, async (req, res) => {
         }
     } catch (error) {
         return res.redirect(`/auth/register?msg=${error}`);
+    }
+});
+
+app.get('/song/:name', async (req, res) => {
+    const songName = path.basename(req.params.name);
+    const songPath = path.join(__dirname, 'songs', songName);
+    if (fs.existsSync(songPath)) {
+        res.sendFile(path.resolve(songPath));
+    } else {
+        res.status(404).send('Song not found');
     }
 });
 
