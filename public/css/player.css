@@ -52,15 +52,29 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 20%;
+    min-height: 100px;
     background-color: var(--black);
+    color: var(--white);
     padding: 20px;
+}
+
+.audioPlayerContainer h1,
+.audioPlayerContainer h2,
+.audioPlayerContainer h3,
+.audioPlayerContainer h4,
+.audioPlayerContainer h5,
+.audioPlayerContainer h6,
+.audioPlayerContainer p,
+.audioPlayerContainer strong {
+    margin: 0;
+    padding: 0;
 }
 
 .audioPlayerContainer .column-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    align-items: start;
     width: 100%;
 }
 
@@ -111,10 +125,9 @@
 }
 
 .audioPlayerControls button {
-    padding: 10px 20px;
+    margin: 10px;
     background-color: transparent;
     color: var(--white);
-    border: 1px solid var(--white);
     border-radius: 5px;
     cursor: pointer;
     margin: 10px;
