@@ -20,6 +20,7 @@ const loggedInMiddleware = (req, res, next) => {
         jwt.verify(req.cookies.auth, process.env.AUTH_SECRET, (err, decoded) => {
             if (err) {
                 res.redirect('/auth/login');
+                console.log(err);
             } else {
                 db.checkUserById(decoded.id).then((result) => {
                     if (result) {
@@ -70,7 +71,7 @@ app.post('/auth/login', notLoggedInMiddleware, async (req, res) => {
     const { username, password } = req.body;
     const result = await db.loginUser(username, password);
     if (typeof result === 'number') {
-        const token = jwt.sign({ id: result }, process.env.AUTH_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: result }, process.env.AUTH_SECRET, { expiresIn: '24h' });
         res.cookie('auth', token, { httpOnly: true });
         res.redirect('/');
     } else {
