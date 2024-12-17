@@ -136,3 +136,24 @@
 .audioPlayerControls button:hover {
     background-color: var(--green);
 }
+.title-progress-container {
+    width: 100%;
+    position: relative;
+}
+
+.title-progress {
+    width: 100%;
+    background-color: var(--light-grey);
+    color: var(--white);
+    padding: 10px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: width 0.5s ease;
+    background: linear-gradient(90deg, #eee 50%, #333 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
