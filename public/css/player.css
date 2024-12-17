@@ -173,10 +173,14 @@
     color: transparent;
 }
 
-.title-progress-slider::-webkit-slider-thumb, .title-progress-slider::-moz-range-thumb {
+.title-progress-slider::-webkit-slider-thumb {
     background-color: transparent;
     color: transparent;
     appearance: none;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    border: none;
 }
 
 .audioPlayerData {
