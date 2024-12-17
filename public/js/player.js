@@ -49,7 +49,12 @@ audioElement.onplay = function () {
 function updateProgressBar() {
     const currentTime = audioElement.currentTime;
     const songLength = audioElement.duration;
-    document.getElementById('progressBarFill').style.width = (currentTime / songLength) * 100 + '%';
+    const progressBarFill = document.getElementById('title-progress');
+    progressBarFill.style.background = `linear-gradient(90deg, var(--green) ${(currentTime / songLength) * 100}%, var(--white) ${(currentTime / songLength) * 100}%)`;
+    progressBarFill.style.webkitBackgroundClip = 'text';
+    progressBarFill.style.webkitTextFillColor = 'transparent';
+    progressBarFill.style.backgroundClip = 'text';
+    progressBarFill.style.textFillColor = 'transparent';
     if (!audioElement.paused) {
         requestAnimationFrame(updateProgressBar);
     }
