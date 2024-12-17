@@ -46,11 +46,28 @@ audioElement.onplay = function () {
     });
 };
 
+const progressBarFill = document.getElementById('title-progress');
+const progressBarInput = document.getElementById('title-progress-slider');
+
+progressBarFill.addEventListener('mouseover', (event) => {
+    const rect = progressBarFill.getBoundingClientRect();
+    const relativeY = event.clientY - rect.top;
+    progressBarInput.style.top = `${relativeY - progressBarInput.offsetHeight / 2}px`;
+});
+
+progressBarFill.addEventListener('mouseleave', () => {
+    progressBarInput.style.top = '50%';
+});
+
+progressBarInput.addEventListener('input', () => {
+    const percentage = progressBarInput.value;
+    audioElement.currentTime = (percentage / 100) * audioElement.duration;
+});
+
 function updateProgressBar() {
     const currentTime = audioElement.currentTime;
     const songLength = audioElement.duration;
     var percentage = (currentTime / songLength) * 100;
-    const progressBarFill = document.getElementById('title-progress');
     progressBarFill.style.background = `linear-gradient(90deg, var(--green) ${percentage}%, var(--white) ${percentage}%)`;
     progressBarFill.style.backgroundClip = 'text';
     progressBarFill.style.textFillColor = 'transparent';

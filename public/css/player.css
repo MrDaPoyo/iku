@@ -154,6 +154,18 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-fill-color: transparent;
+    position: relative;
+}
+
+.title-progress-slider {
+    width: 100%;
+    background-color: transparent;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: transparent;
+    visibility: hidden;a
 }
 
 .audioPlayerData {
