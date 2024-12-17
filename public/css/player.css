@@ -151,7 +151,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     transition: width 0.5s ease;
-    background: linear-gradient(90deg, #eee 50%, #333 50%);
+    background: linear-gradient(90deg, var(--green) 50%, var(--white) 50%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
