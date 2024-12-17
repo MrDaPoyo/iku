@@ -93,6 +93,7 @@
     height: 100%;
     background-color: var(--black);
     margin-left: auto;
+    margin-left: 20px;
 }
 
 .audioPlayerProgress {
