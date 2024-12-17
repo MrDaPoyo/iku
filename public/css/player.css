@@ -140,6 +140,22 @@
     width: 100%;
     position: relative;
 }
+
+.title-progress {
+    background-color: var(--light-grey);
+    color: var(--white);
+    width: min-content;
+    margin: 10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: width 0.5s ease;
+    background: var(--white);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
 .audioPlayerData {
     width: 100%;
     border-bottom: 5px dashed var(--white);
@@ -147,21 +163,4 @@
 }
 .audioPlayerData p {
     margin-bottom: 5px;
-}
-
-.title-progress {
-    width: 100%;
-    background-color: var(--light-grey);
-    color: var(--white);
-    padding: 10px;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: width 0.5s ease;
-    background: linear-gradient(90deg, var(--green) 50%, var(--white) 50%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
 }

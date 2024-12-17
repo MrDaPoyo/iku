@@ -49,10 +49,9 @@ audioElement.onplay = function () {
 function updateProgressBar() {
     const currentTime = audioElement.currentTime;
     const songLength = audioElement.duration;
+    var percentage = (currentTime / songLength) * 100;
     const progressBarFill = document.getElementById('title-progress');
-    progressBarFill.style.background = `linear-gradient(90deg, var(--green) ${(currentTime / songLength) * 100}%, var(--white) ${(currentTime / songLength) * 100}%)`;
-    progressBarFill.style.webkitBackgroundClip = 'text';
-    progressBarFill.style.webkitTextFillColor = 'transparent';
+    progressBarFill.style.background = `linear-gradient(90deg, var(--green) ${percentage}%, var(--white) ${percentage}%)`;
     progressBarFill.style.backgroundClip = 'text';
     progressBarFill.style.textFillColor = 'transparent';
     if (!audioElement.paused) {
@@ -64,7 +63,6 @@ document.getElementById('playButton').addEventListener('click', () => {
     if (audioElement.paused) {
         audioElement.play();
     } else {
-        updateProgressBar();
         audioElement.pause();
     }
 });
@@ -82,7 +80,6 @@ document.getElementById('pastButton').addEventListener('click', () => {
 document.getElementById('stopButton').addEventListener('click', () => {
     audioElement.pause();
     audioElement.currentTime = 0;
-    updateProgressBar();
 });
 
 audioElement.addEventListener('pause', () => {
