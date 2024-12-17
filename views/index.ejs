@@ -19,7 +19,18 @@
                         </div>
                     </div>
                     <div class="audioPlayerControls">
-                        <button id="playButton"><img src="/images/icons/play.svg" style="filter: invert(1);"></button>
+                        <button id="playButton" onclick="togglePlayPause()"><img id="playPauseIcon" src="/images/icons/play.svg" style="filter: invert(1);"></button>
+                        <script>
+                            function togglePlayPause() {
+                                var audioPlayer = document.getElementById('audioPlayer');
+                                var playPauseIcon = document.getElementById('playPauseIcon');
+                                if (audioPlayer.paused) {
+                                    playPauseIcon.src = '/images/icons/pause.svg';
+                                } else {
+                                    playPauseIcon.src = '/images/icons/play.svg';
+                                }
+                            }
+                        </script>
                         <button id="nextButton"><img src="/images/icons/skip-forward.svg" style="filter: invert(1);"></button>
                         <button id="pastButton"><img src="/images/icons/skip-backward.svg" style="filter: invert(1);"></button>
                         <button id="stopButton"><img src="/images/icons/stop.svg" style="filter: invert(1);"></button>
