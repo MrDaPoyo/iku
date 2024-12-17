@@ -183,6 +183,15 @@
     border: none;
 }
 
+.title-progress-slider::-moz-range-thumb {
+    background-color: transparent;
+    color: transparent;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    border: none;
+
 .audioPlayerData {
     width: 100%;
     border-bottom: 5px dashed var(--white);
