@@ -140,6 +140,14 @@
     width: 100%;
     position: relative;
 }
+.audioPlayerData {
+    width: 100%;
+    border-bottom: 5px dashed var(--white);
+    padding-bottom: auto;
+}
+.audioPlayerData p {
+    margin-bottom: 5px;
+}
 
 .title-progress {
     width: 100%;
