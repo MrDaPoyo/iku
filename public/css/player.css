@@ -158,14 +158,23 @@
 }
 
 .title-progress-slider {
+    -webkit-appearance: none;
     width: 100%;
+    cursor: pointer;
+    height: 100%;
     background-color: transparent;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    border: none;
     color: transparent;
-    visibility: hidden;a
+}
+
+.title-progress-slider::-webkit-slider-thumb, .title-progress-slider::-moz-range-thumb {
+    background-color: transparent;
+    color: transparent;
+    appearance: none;
 }
 
 .audioPlayerData {
