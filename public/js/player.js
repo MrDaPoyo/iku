@@ -64,6 +64,7 @@ document.getElementById('playButton').addEventListener('click', () => {
     if (audioElement.paused) {
         audioElement.play();
     } else {
+        updateProgressBar();
         audioElement.pause();
     }
 });
@@ -81,6 +82,7 @@ document.getElementById('pastButton').addEventListener('click', () => {
 document.getElementById('stopButton').addEventListener('click', () => {
     audioElement.pause();
     audioElement.currentTime = 0;
+    updateProgressBar();
 });
 
 audioElement.addEventListener('pause', () => {
