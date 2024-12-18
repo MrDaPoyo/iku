@@ -21,7 +21,6 @@ const loggedInMiddleware = (req, res, next) => {
             if (err) {
                 res.clearCookie('auth');
                 res.redirect('/auth/login');
-                console.log(err);
             } else {
                 db.checkUserById(decoded.id).then((result) => {
                     if (result) {
