@@ -126,7 +126,8 @@ app.get('/song/getSongsByUser/', loggedInMiddleware, (req, res) => {
 
 app.get('/song/get/:id', async (req, res) => {
     const songId = req.params.id;
-    const songPath = await db.getTrackStatsById(songId).path;
+    const trackStats = await db.getTrackStatsById(songId);
+    const songPath = path.join('songs', trackStats.path);
     if (fs.existsSync(songPath)) {
         res.sendFile(path.resolve(songPath));
     } else {
