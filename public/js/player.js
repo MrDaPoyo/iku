@@ -10,21 +10,33 @@ const canvas = document.getElementById('audioVisualizer');
 const canvasCtx = canvas.getContext('2d');
 const songId = new URLSearchParams(window.location.search).get('track_id') || 1;
 
-audioElement.src = `/song/get/${songId}`;
-fetch(`/song/data/${songId}`)
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            console.error(data.error);
-        } else {
-            console.log('Song data:', data);
-            // Update the song title and author
-            document.getElementById('title-artist').innerText = data.artist;
-            const titleText = document.getElementById('title-text');
-            titleText.innerText = `${data.title}`;
-        }
-    })
-    .catch(error => console.error('Error fetching song data:', error));
+function selectSong(songId) {
+    audioElement.src = `/song/get/${songId}`;
+    fetch(`/song/data/${songId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.warn('No data found');
+                document.getElementById('title-artist').innerText = "Absolutely No One";
+                const titleText = document.getElementById('title-text');
+                titleText.innerText = `Song not found.`;
+            } else if (data.artist && data.title) {
+                console.log('Song data:', data);
+                // Update the song title and author
+                document.getElementById('title-artist').innerText = data.artist;
+                const titleText = document.getElementById('title-text');
+                titleText.innerText = `${data.title}`;
+            } else {
+                console.warn('No data found');
+                document.getElementById('title-artist').innerText = "Absolutely No One";
+                const titleText = document.getElementById('title-text');
+                titleText.innerText = `Song not found.`;
+            }
+        })
+        .catch(error => console.error('Error fetching song data:', error));
+}
+
+selectSong(songId);
 
 function draw() {
     requestAnimationFrame(draw);
@@ -45,7 +57,6 @@ function draw() {
     gradient.addColorStop(0.66, '#0C85EC'); // blue
     gradient.addColorStop(1, '#3EB081'); // green
     canvasCtx.fillStyle = gradient;
-    // canvasCtx.fillStyle = 'rgb(255, 255, 255)';
 
     const minHeight = 5; // Minimum height for the bars
 
