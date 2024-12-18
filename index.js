@@ -19,6 +19,7 @@ const loggedInMiddleware = (req, res, next) => {
     if (req.cookies.auth) {
         jwt.verify(req.cookies.auth, process.env.AUTH_SECRET, (err, decoded) => {
             if (err) {
+                res.clearCookie('auth');
                 res.redirect('/auth/login');
                 console.log(err);
             } else {
