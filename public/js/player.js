@@ -31,14 +31,19 @@ function draw() {
     canvasCtx.fillStyle = gradient;
     // canvasCtx.fillStyle = 'rgb(255, 255, 255)';
 
-    for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
+    const minHeight = 5; // Minimum height for the bars
 
-        canvasCtx.fillRect(x, canvas.height - barHeight / 3, barWidth, barHeight / 2);
+    for (let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i] / 2;
+        barHeight = Math.max(barHeight, minHeight); // Ensure the bar height is at least minHeight
+
+        canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
 
         x += barWidth + 1;
     }
 }
+
+draw();
 
 audioElement.onplay = function () {
     audioCtx.resume().then(() => {
