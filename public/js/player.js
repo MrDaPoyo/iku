@@ -62,6 +62,7 @@ progressBarFill.addEventListener('mouseleave', () => {
 progressBarInput.addEventListener('input', () => {
     const percentage = progressBarInput.value;
     audioElement.currentTime = (percentage / 100) * audioElement.duration;
+    updateProgressBar();
 });
 
 function updateProgressBar() {
