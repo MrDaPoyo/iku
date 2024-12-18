@@ -9,7 +9,20 @@ analyser.connect(audioCtx.destination);
 const canvas = document.getElementById('audioVisualizer');
 const canvasCtx = canvas.getContext('2d');
 
-audioElement.src = '/song/elevator-music-bossa-nova.mp3';
+audioElement.src = '/song/get/elevator-music-bossa-nova.mp3';
+fetch('/song/data/elevator-music-bossa-nova.mp3')
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error(data.error);
+        } else {
+            console.log('Song data:', data);
+            // Update the song title and author
+            document.getElementById('title-progress').innerText = data.title;
+            document.getElementById('title-artist').innerText = data.artist;
+        }
+    })
+    .catch(error => console.error('Error fetching song data:', error));
 
 function draw() {
     requestAnimationFrame(draw);

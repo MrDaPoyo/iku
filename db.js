@@ -11,10 +11,26 @@ var db = new sqlite3.Database('iku.db', (err) => {
 
 db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT, fav_genre TEXT)');
-    db.run('CREATE TABLE IF NOT EXISTS tracks (id INTEGER PRIMARY KEY, title TEXT, artist TEXT, album TEXT, year INTEGER, genre TEXT, user_id INTEGER)');
+    db.run('CREATE TABLE IF NOT EXISTS tracks (id INTEGER PRIMARY KEY, title TEXT, artist TEXT, album TEXT, year INTEGER, genre TEXT, user_id INTEGER, path TEXT UNIQUE NOT NULL)');
     db.run('CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, content TEXT, post_id INTEGER, user_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY, name TEXT, user_id INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS playlist_tracks (playlist_id INTEGER, track_id INTEGER, PRIMARY KEY (playlist_id, track_id), FOREIGN KEY (playlist_id) REFERENCES playlists(id), FOREIGN KEY (track_id) REFERENCES tracks(id))');
+    db.get('SELECT COUNT(*) AS count FROM tracks', (err, row) => {
+        if (err) {
+            console.error(err.message);
+        } else if (row.count === 0) {
+            db.run('INSERT INTO tracks (title, artist, album, year, genre, user_id, path) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+                ['Sample Track No1', 'Sample Artist No1', 'Sample Album No1', 2024, 'Sample Genre', 1, "elevator-music-bossa-nova.mp3"], 
+                (err) => {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log('Sample track inserted successfully');
+                    }
+                }
+            );
+        }
+    });
 });
 
 
@@ -93,6 +109,44 @@ function comparePasswords(password, hash) {
     return bcrypt.compare(password, hash);
 }
 
+function registerTrack(title, artist, album, year, genre, user_id) {
+    return new Promise((resolve, reject) => {
+        db.run('INSERT INTO tracks (title, artist, album, year, genre, user_id) VALUES (?, ?, ?, ?, ?, ?)', [title, artist, album, year, genre, user_id], (err) => {
+            if (err) {
+                console.error(err.message);
+                reject(err.message);
+            } else {
+                console.log('Track registered successfully');
+                resolve(true);
+            }
+        });
+    });
+}
+
+function getTrackStatsByName(name) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM tracks WHERE title = ?', [name], (err, row) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
+function getTrackStatsByPath(path) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM tracks WHERE path = ?', [path], (err, row) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
 module.exports = {
     db,
     registerUser,
@@ -100,4 +154,7 @@ module.exports = {
     comparePasswords,
     checkUserById,
     checkUserByUsername,
+    getTrackStatsByName,
+    getTrackStatsByPath,
+    registerTrack,
 };

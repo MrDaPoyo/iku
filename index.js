@@ -112,7 +112,7 @@ app.post('/auth/register', notLoggedInMiddleware, async (req, res) => {
     }
 });
 
-app.get('/song/:name', async (req, res) => {
+app.get('/song/get/:name', async (req, res) => {
     const songName = path.basename(req.params.name);
     const songPath = path.join(__dirname, 'songs', songName);
     if (fs.existsSync(songPath)) {
@@ -122,7 +122,19 @@ app.get('/song/:name', async (req, res) => {
     }
 });
 
+app.get('/song/data/:name', async (req, res) => {
+    const songName = path.basename(req.params.name);
+    const songPath = path.join(__dirname, 'songs', songName);
+    if (fs.existsSync(songPath)) {
+        const stats = await db.getTrackStatsByPath(songName);
+        res.json(await stats || {"error": "No data found"});
+    } else {
+        res.status(404).send('Song not found');
+    }
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
