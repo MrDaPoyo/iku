@@ -61,6 +61,8 @@ progressBarFill.addEventListener('mouseover', (event) => {
     progressBarInput.style.top = `${relativeY - progressBarInput.offsetHeight / 2}px`;
 });
 
+let wasPlaying = false;
+
 progressBarFill.addEventListener('mouseleave', () => {
     progressBarInput.style.top = '50%';
 });
@@ -71,15 +73,35 @@ progressBarInput.addEventListener('input', () => {
     updateProgressBar();
 });
 
+progressBarInput.addEventListener('mousedown', () => {
+    wasPlaying = !audioElement.paused;
+    if (wasPlaying) {
+        audioElement.pause();
+    }
+});
+
+progressBarInput.addEventListener('mouseup', () => {
+    if (wasPlaying) {
+        audioElement.play();
+    }
+});
+
 // Make it phone friendly
 progressBarFill.addEventListener('touchstart', (event) => {
     const rect = progressBarFill.getBoundingClientRect();
     const relativeY = event.touches[0].clientY - rect.top;
     progressBarInput.style.top = `${relativeY - progressBarInput.offsetHeight / 2}px`;
+    wasPlaying = !audioElement.paused;
+    if (wasPlaying) {
+        audioElement.pause();
+    }
 });
 
 progressBarFill.addEventListener('touchend', () => {
     progressBarInput.style.top = '50%';
+    if (wasPlaying) {
+        audioElement.play();
+    }
 });
 
 progressBarInput.addEventListener('touchmove', (event) => {
