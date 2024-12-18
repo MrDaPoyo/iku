@@ -25,9 +25,10 @@ function draw() {
     let x = 0;
 
     const gradient = canvasCtx.createLinearGradient(0, 0, canvas.width, 0);
-    gradient.addColorStop(0, 'red');
-    gradient.addColorStop(0.5, 'yellow');
-    gradient.addColorStop(1, 'green');
+    gradient.addColorStop(0, '#E41E21'); // red
+    gradient.addColorStop(0.33, '#F09C1C'); // orange
+    gradient.addColorStop(0.66, '#0C85EC'); // blue
+    gradient.addColorStop(1, '#3EB081'); // green
     canvasCtx.fillStyle = gradient;
     // canvasCtx.fillStyle = 'rgb(255, 255, 255)';
 
