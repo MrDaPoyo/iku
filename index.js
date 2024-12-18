@@ -112,6 +112,18 @@ app.post('/auth/register', notLoggedInMiddleware, async (req, res) => {
     }
 });
 
+app.get('/auth/logout', loggedInMiddleware, (req, res) => {
+    res.clearCookie('auth');
+    res.redirect('/auth/login');
+});
+
+app.get('/song/getSongsByUser/', loggedInMiddleware, (req, res) => {
+    const userId = req.user.id;
+    db.getTracksByUser(userId).then((result) => {
+        res.json(result);
+    });
+});
+
 app.get('/song/get/:name', async (req, res) => {
     const songName = path.basename(req.params.name);
     const songPath = path.join(__dirname, 'songs', songName);

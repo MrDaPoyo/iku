@@ -147,6 +147,18 @@ function getTrackStatsByPath(path) {
     });
 }
 
+function getTracksByUser(user_id) {
+    return new Promise((resolve, reject) => {
+        db.all('SELECT * FROM tracks WHERE user_id = ?', [user_id], (err, rows) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 module.exports = {
     db,
     registerUser,
@@ -156,5 +168,6 @@ module.exports = {
     checkUserByUsername,
     getTrackStatsByName,
     getTrackStatsByPath,
+    getTracksByUser,
     registerTrack,
 };
