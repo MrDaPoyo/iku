@@ -20,7 +20,7 @@ function draw() {
 
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const barWidth = (canvas.width / bufferLength) * 2.5;
+    const barWidth = (canvas.width / bufferLength) * 10;
     let barHeight;
     let x = 0;
 
@@ -29,6 +29,7 @@ function draw() {
     gradient.addColorStop(0.5, 'yellow');
     gradient.addColorStop(1, 'green');
     canvasCtx.fillStyle = gradient;
+    // canvasCtx.fillStyle = 'rgb(255, 255, 255)';
 
     for (let i = 0; i < bufferLength; i++) {
         barHeight = dataArray[i];
