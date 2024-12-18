@@ -18,7 +18,7 @@ fetch('/song/data/elevator-music-bossa-nova.mp3')
         } else {
             console.log('Song data:', data);
             // Update the song title and author
-            document.getElementById('title-progress').innerText = data.title;
+            document.getElementById('title').innerText = data.title;
             document.getElementById('title-artist').innerText = data.artist;
         }
     })
