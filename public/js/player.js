@@ -8,7 +8,7 @@ analyser.connect(audioCtx.destination);
 
 const canvas = document.getElementById('audioVisualizer');
 const canvasCtx = canvas.getContext('2d');
-const songId = new URLSearchParams(window.location.search).get('track_id');
+const songId = new URLSearchParams(window.location.search).get('track_id') || 1;
 
 audioElement.src = `/song/get/${songId}`;
 fetch(`/song/data/${songId}`)
