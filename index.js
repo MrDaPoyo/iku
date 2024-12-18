@@ -136,8 +136,8 @@ app.get('/song/get/:id', async (req, res) => {
 
 app.get('/song/data/:id', async (req, res) => {
     const track = await db.getTrackStatsById(req.params.id);
-    const stats = await track;
-    res.json(await stats || { "error": "No data found" });
+    const stats = await track || { "error": "No data found" };
+    res.json(await stats);
 });
 
 // Start the server
