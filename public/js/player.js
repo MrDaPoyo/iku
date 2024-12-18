@@ -55,7 +55,6 @@ audioElement.onplay = function () {
 
 const progressBarFill = document.getElementById('title-progress');
 const progressBarInput = document.getElementById('title-progress-slider');
-
 progressBarFill.addEventListener('mouseover', (event) => {
     const rect = progressBarFill.getBoundingClientRect();
     const relativeY = event.clientY - rect.top;
@@ -68,6 +67,26 @@ progressBarFill.addEventListener('mouseleave', () => {
 
 progressBarInput.addEventListener('input', () => {
     const percentage = progressBarInput.value;
+    audioElement.currentTime = (percentage / 100) * audioElement.duration;
+    updateProgressBar();
+});
+
+// Make it phone friendly
+progressBarFill.addEventListener('touchstart', (event) => {
+    const rect = progressBarFill.getBoundingClientRect();
+    const relativeY = event.touches[0].clientY - rect.top;
+    progressBarInput.style.top = `${relativeY - progressBarInput.offsetHeight / 2}px`;
+});
+
+progressBarFill.addEventListener('touchend', () => {
+    progressBarInput.style.top = '50%';
+});
+
+progressBarInput.addEventListener('touchmove', (event) => {
+    const rect = progressBarFill.getBoundingClientRect();
+    const touchX = event.touches[0].clientX - rect.left;
+    const percentage = (touchX / rect.width) * 100;
+    progressBarInput.value = percentage;
     audioElement.currentTime = (percentage / 100) * audioElement.duration;
     updateProgressBar();
 });
