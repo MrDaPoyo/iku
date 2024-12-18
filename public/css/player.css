@@ -202,3 +202,8 @@
 .audioPlayerData p {
     margin-bottom: 5px;
 }
+
+.trackContainer {
+    height: 100%;
+    padding: 20px;
+}
