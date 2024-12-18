@@ -8,9 +8,10 @@ analyser.connect(audioCtx.destination);
 
 const canvas = document.getElementById('audioVisualizer');
 const canvasCtx = canvas.getContext('2d');
+const songId = new URLSearchParams(window.location.search).get('track_id');
 
-audioElement.src = '/song/get/elevator-music-bossa-nova.mp3';
-fetch('/song/data/elevator-music-bossa-nova.mp3')
+audioElement.src = `/song/get/${songId}`;
+fetch(`/song/data/${songId}`)
     .then(response => response.json())
     .then(data => {
         if (data.error) {

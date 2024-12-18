@@ -124,9 +124,9 @@ app.get('/song/getSongsByUser/', loggedInMiddleware, (req, res) => {
     });
 });
 
-app.get('/song/get/:name', async (req, res) => {
-    const songName = path.basename(req.params.name);
-    const songPath = path.join(__dirname, 'songs', songName);
+app.get('/song/get/:id', async (req, res) => {
+    const songId = req.params.id;
+    const songPath = await db.getTrackStatsById(songId).path;
     if (fs.existsSync(songPath)) {
         res.sendFile(path.resolve(songPath));
     } else {
@@ -134,15 +134,10 @@ app.get('/song/get/:name', async (req, res) => {
     }
 });
 
-app.get('/song/data/:name', async (req, res) => {
-    const songName = path.basename(req.params.name);
-    const songPath = path.join(__dirname, 'songs', songName);
-    if (fs.existsSync(songPath)) {
-        const stats = await db.getTrackStatsByPath(songName);
-        res.json(await stats || {"error": "No data found"});
-    } else {
-        res.status(404).send('Song not found');
-    }
+app.get('/song/data/:id', async (req, res) => {
+    const track = await db.getTrackStatsById(req.params.id);
+    const stats = await track;
+    res.json(await stats || { "error": "No data found" });
 });
 
 // Start the server
