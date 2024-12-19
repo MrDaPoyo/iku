@@ -159,18 +159,24 @@ app.get('/song/data/:id', async (req, res) => {
 
 app.post('/song/submit', loggedInMiddleware, async (req, res) => {
     upload.fields([{ name: 'track', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), async (req, res) => {
-        var { title, artist, album, year, genre, length } = req.body;
+        var { title, artist, album, year, genre } = req.body;
         const trackFile = req.files['track'] ? req.files['track'][0] : null;
         const coverFile = req.files['cover'] ? req.files['cover'][0] : null;
 
-        if (!title || !artist || !album || !year || !genre || !trackFile || !length) {
+        if (coverFile) {
+            var randomNumbers = Math.floor(100000 + Math.random() * 900000);
+            var coverPath = `covers/${randomNumbers}-${coverFile.originalname}`;
+            fs.moveSync(coverFile.path, coverPath);
+        }
+
+        if (!title || !artist || !album || !year || !genre || !trackFile) {
             return res.redirect('/?msg=Please fill in all the fields');
         }
 
         if (trackFile) {
-            length = await getAudioDurationInSeconds(trackFile.path);
+            var length = await getAudioDurationInSeconds(trackFile.path);
         } else {
-            length = null;
+            var length = null;
         }
 
         const userId = req.user.id;

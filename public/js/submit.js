@@ -50,17 +50,9 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
                         <label for="genre">Genre:</label>
                         <input type="text" id="genre" name="genre" required>
                     </div>
-                    <div style="flex: 1;">
-                        <label for="path">Path:</label>
-                        <input type="text" id="path" name="path" required>
-                    </div>
                 </div>
                 <br>
                 <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 5px;">
-                        <label for="length">Length:</label>
-                        <input type="text" id="length" name="length" required>
-                    </div>
                     <div style="flex: 1;">
                         <label for="cover">Cover:</label>
                         <input type="file" id="cover" name="cover" required>
