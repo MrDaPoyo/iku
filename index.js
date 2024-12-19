@@ -162,6 +162,14 @@ app.get('/song/data/:id', async (req, res) => {
 });
 
 app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), async (req, res) => {
+    function removeTrackFiles(trackPath, coverPath) {
+        if (fs.existsSync(trackPath)) {
+            fs.unlinkSync(trackPath);
+        }
+        if (fs.existsSync(coverPath)) {
+            fs.unlinkSync(coverPath);
+        }
+    }
     console.log(JSON.stringify(req.body));
     var { trackName, artist, album, year, genre } = req.body;
     const trackFile = req.files['track'] ? req.files['track'][0] : null;
@@ -178,10 +186,7 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
     fs.moveSync(trackFile.path, trackPath);
 
     if (!trackName || !artist || !year || !genre || !trackFile) {
-        fs.removeSync(tracjh);
-        if (coverFile) {
-            fs.removeSync(coverPath);
-        }
+        removeTrackFiles(trackPath, coverPath);
         console.log('Please fill in all the fields');
         return res.status(400).send('Please fill in all the fields');
     }
@@ -194,10 +199,12 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
 
     const userId = req.user.id;
     if (isNaN(year) || isNaN(length)) {
+        removeTrackFiles(trackPath, coverPath);
         console.log('Year abd length must be numbers');
         return res.status(400).send('Year and length must be numbers');
     }
     if (typeof userId !== 'number') {
+        removeTrackFiles(trackPath, coverPath);
         console.log('Invalid user ID');
         return res.status(400).send('Invalid user ID');
     }
@@ -208,10 +215,12 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
             console.log('Track submitted successfully');
             res.status(200).send('Track submitted successfully');
         } else {
+            removeTrackFiles(trackPath, coverPath);
             console.log('Failed to submit track');
             res.status(500).send('Failed to submit track');
         }
     } catch (error) {
+        removeTrackFiles(trackPath, coverPath);
         console.log(error);
         res.status(500).send('Failed to submit track');
     }
