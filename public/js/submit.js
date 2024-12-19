@@ -100,6 +100,7 @@ document.getElementById('submitTrackButton').addEventListener('click', function 
                 .then(result => {
                     if (result) {
                         alert(result);
+                        
                     }
                 })
                 .catch(error => {

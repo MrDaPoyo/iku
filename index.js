@@ -172,7 +172,7 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
     }
     console.log(JSON.stringify(req.body));
     var { trackName, artist, album, year, genre } = req.body;
-    const trackFile = req.files['track'] ? req.files['track'][0] : null;
+    const trackFile = req.files['trackFile'] ? req.files['trackFile'][0] : null;
     const coverFile = req.files['cover'] ? req.files['cover'][0] : null;
 
     if (coverFile) {
@@ -181,9 +181,15 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
         fs.moveSync(coverFile.path, coverPath);
     }
     
-    var randomNumbers = Math.floor(100000 + Math.random() * 900000);
-    var trackPath = `songs/${randomNumbers}-${trackFile.originalname}`;
-    fs.moveSync(trackFile.path, trackPath);
+    if (trackFile) {
+        var randomNumbers = Math.floor(100000 + Math.random() * 900000);
+        var trackPath = `songs/${randomNumbers}-${trackFile.originalname}`;
+        fs.moveSync(trackFile.path, trackPath);
+    } else {
+        removeTrackFiles(trackPath, coverPath);
+        console.log('Please upload a track file');
+        return res.status(400).send('Please upload a track file');
+    }
 
     if (!trackName || !artist || !year || !genre || !trackFile) {
         removeTrackFiles(trackPath, coverPath);
@@ -192,7 +198,7 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
     }
 
     if (trackFile) {
-        var length = await getAudioDurationInSeconds(trackFile.path);
+        var length = await getAudioDurationInSeconds(trackPath);
     } else {
         var length = null;
     }
@@ -210,9 +216,11 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
     }
 
     try {
-        const result = await db.registerTrack(trackName, artist, album, year, genre, userId, trackPath, length, coverPath);
+        coverPath = coverPath || null;
+        const result = await db.registerTrack(trackName, artist, album, year, genre, userId, path.basename(trackPath), Math.round(length), coverPath);
         if (result) {
             console.log('Track submitted successfully');
+            fs.removeSync(trackFile.path);
             res.status(200).send('Track submitted successfully');
         } else {
             removeTrackFiles(trackPath, coverPath);
