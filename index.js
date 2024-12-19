@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const fs = require('fs-extra');
+const multer = require('multer');
+const getAudioDurationInSeconds = require('get-audio-duration').getAudioDurationInSeconds;
 
 const app = express();
 const port = 3000;
@@ -46,6 +48,17 @@ const notLoggedInMiddleware = (req, res, next) => {
         res.redirect('/');
     }
 }
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const upload = multer({ storage: storage, limits: { fileSize: 10000000 } });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -145,26 +158,43 @@ app.get('/song/data/:id', async (req, res) => {
 });
 
 app.post('/song/submit', loggedInMiddleware, async (req, res) => {
-    const { title, artist, album, year, genre, path, length, cover } = req.body;
-    if (!title || !artist || !album || !year || !genre || !path || !length) {
-        return res.redirect('/?msg=Please fill in all the fields');
-    }
-    const userId = req.user.id;
-    if (isNaN(year) || isNaN(length)) {
-        return res.redirect('/?msg=Year and length must be numbers');
-    }
-    if (typeof userId !== 'number') {
-        return res.redirect('/?msg=Invalid user ID');
-    }
-    try {
-        const result = await registerTrack(title, artist, album, year, genre, userId, path, length, cover);
-        if (result) {
-            res.redirect('/?msg=Track submitted successfully');
-        } else {
-            res.redirect('/?msg=Failed to submit track');
+    upload.fields([{ name: 'track', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), async (req, res) => {
+        var { title, artist, album, year, genre, length } = req.body;
+        const trackFile = req.files['track'] ? req.files['track'][0] : null;
+        const coverFile = req.files['cover'] ? req.files['cover'][0] : null;
+
+        if (!title || !artist || !album || !year || !genre || !trackFile || !length) {
+            return res.redirect('/?msg=Please fill in all the fields');
         }
-    } catch (error) {
-        res.redirect(`/?msg=${error}`);
+
+        if (trackFile) {
+            length = await getAudioDurationInSeconds(trackFile.path);
+        } else {
+            length = null;
+        }
+
+        const userId = req.user.id;
+        if (isNaN(year) || isNaN(length)) {
+            return res.redirect('/?msg=Year and length must be numbers');
+        }
+        if (typeof userId !== 'number') {
+            return res.redirect('/?msg=Invalid user ID');
+        }
+
+        var randomNumbers = Math.floor(100000 + Math.random() * 900000);
+        var trackPath = `songs/${randomNumbers}-${trackFile.originalname}`;
+        fs.moveSync(trackFile.path, trackPath);
+
+        try {
+            const result = await db.registerTrack(title, artist, album, year, genre, userId, trackPath, length, coverPath);
+            if (result) {
+                res.redirect('/?msg=Track submitted successfully');
+            } else {
+                res.redirect('/?msg=Failed to submit track');
+            }
+        } catch (error) {
+            res.redirect(`/?msg=${error}`);
+        }
     }
 });
 

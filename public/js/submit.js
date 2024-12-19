@@ -24,7 +24,7 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
             <h2>Submit Track</h2>
             <form id="submitTrackForm">
                 <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 10px;">
+                    <div style="flex: 1; margin-right: 5px;">
                         <label for="trackName">Track Name:</label>
                         <input type="text" id="trackName" name="trackName" required>
                     </div>
@@ -35,9 +35,9 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
                 </div>
                 <br>
                 <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 10px;">
+                    <div style="flex: 1; margin-right: 5px;">
                         <label for="album">Album:</label>
-                        <input type="text" id="album" name="album" required>
+                        <input type="text" id="album" name="album">
                     </div>
                     <div style="flex: 1;">
                         <label for="year">Year:</label>
@@ -46,7 +46,7 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
                 </div>
                 <br>
                 <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 10px;">
+                    <div style="flex: 1; margin-right: 5px;">
                         <label for="genre">Genre:</label>
                         <input type="text" id="genre" name="genre" required>
                     </div>
@@ -57,7 +57,7 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
                 </div>
                 <br>
                 <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 10px;">
+                    <div style="flex: 1; margin-right: 5px;">
                         <label for="length">Length:</label>
                         <input type="text" id="length" name="length" required>
                     </div>
@@ -68,7 +68,7 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
                 </div>
                 <br>
                 <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 10px;">
+                    <div style="flex: 1; margin-right: 5px;">
                         <label for="trackFile">Track File:</label>
                         <input type="file" id="trackFile" name="trackFile" required>
                     </div>

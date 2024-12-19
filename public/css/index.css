@@ -227,3 +227,7 @@ button:hover {
 .align-center {
     align-items: center;
 }
+
+input:required {
+    border-color: var(--red);
+}
