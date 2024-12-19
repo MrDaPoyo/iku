@@ -55,7 +55,7 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
                 <div style="display: flex; justify-content: space-between;">
                     <div style="flex: 1;">
                         <label for="cover">Cover:</label>
-                        <input type="file" id="cover" name="cover" required>
+                        <input type="file" id="cover" name="cover">
                     </div>
                 </div>
                 <br>
