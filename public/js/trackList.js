@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const trackListContainer = document.createElement('div');
         trackListContainer.className = 'track-list';
-
+        for (let i = 0; i < 10; i++) {
         songs.forEach(song => {
             const minutes = Math.floor(song.length / 60);
             const seconds = song.length % 60;
@@ -34,10 +34,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             link.href = `/?track_id=${song.id}`;
             link.innerHTML = card;
 
-            trackListContainer.appendChild(link);
+            document.getElementById("trackContainer").appendChild(link);
         });
-
-        document.getElementById("trackContainer").appendChild(trackListContainer);
+    }
     } catch (error) {
         console.error('Error fetching songs:', error);
     }
