@@ -109,9 +109,9 @@ function comparePasswords(password, hash) {
     return bcrypt.compare(password, hash);
 }
 
-function registerTrack(title, artist, album, year, genre, user_id, path, length) {
+function registerTrack(title, artist, album, year, genre, user_id, path, length, cover) {
     return new Promise((resolve, reject) => {
-        db.run('INSERT INTO tracks (title, artist, album, year, genre, user_id, path, length) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [title, artist, album, year, genre, user_id, path, length], (err) => {
+        db.run('INSERT INTO tracks (title, artist, album, year, genre, user_id, path, length, cover) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [title, artist, album, year, genre, user_id, path, length, cover], (err) => {
             if (err) {
                 console.warn(err.message);
                 reject(err.message);

@@ -144,6 +144,30 @@ app.get('/song/data/:id', async (req, res) => {
     res.json(await stats);
 });
 
+app.post('/song/submit', loggedInMiddleware, async (req, res) => {
+    const { title, artist, album, year, genre, path, length, cover } = req.body;
+    if (!title || !artist || !album || !year || !genre || !path || !length) {
+        return res.redirect('/?msg=Please fill in all the fields');
+    }
+    const userId = req.user.id;
+    if (isNaN(year) || isNaN(length)) {
+        return res.redirect('/?msg=Year and length must be numbers');
+    }
+    if (typeof userId !== 'number') {
+        return res.redirect('/?msg=Invalid user ID');
+    }
+    try {
+        const result = await registerTrack(title, artist, album, year, genre, userId, path, length, cover);
+        if (result) {
+            res.redirect('/?msg=Track submitted successfully');
+        } else {
+            res.redirect('/?msg=Failed to submit track');
+        }
+    } catch (error) {
+        res.redirect(`/?msg=${error}`);
+    }
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

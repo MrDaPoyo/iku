@@ -30,6 +30,32 @@
     position: relative;
 }
 
+.dashboardHeaderRight {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: max-content;
+}
+
+.dashboardHeaderRight h1 {
+    margin-inline: auto;
+    padding: 0;
+}
+
+.dashboardHeaderRight button {
+    padding: 5px;
+    cursor: pointer;
+    margin-inline-start: 10px;
+    background-color: var(--black);
+    color: var(--white);
+}
+
+.dashboardHeaderRight button:hover {
+    background-color: var(--white);
+    color: var(--black);
+}
+
 .dashboard .dashboardHeader .logo {
     height: 100%;
     aspect-ratio: 1/1;
