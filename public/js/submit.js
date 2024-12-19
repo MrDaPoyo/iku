@@ -1,6 +1,6 @@
 let openModal = false;
 
-document.getElementById('submitTrackButton').addEventListener('click', function() {
+document.getElementById('submitTrackButton').addEventListener('click', function () {
     if (openModal) {
         const existingModal = document.getElementById('submitTrackModal');
         if (existingModal) {
@@ -22,52 +22,52 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
 
         const modalContent = `
             <h2>Submit Track</h2>
-            <form id="submitTrackForm">
-                <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 5px;">
-                        <label for="trackName">Track Name:</label>
-                        <input type="text" id="trackName" name="trackName" required>
-                    </div>
-                    <div style="flex: 1;">
-                        <label for="artist">Artist:</label>
-                        <input type="text" id="artist" name="artist" required>
-                    </div>
+            <form id="submitTrackForm" method="POST" enctype="multipart/form-data" action="/song/submit">
+            <div style="display: flex; justify-content: space-between;">
+                <div style="flex: 1; margin-right: 5px;">
+                <label for="trackName">Track Name:</label>
+                <input type="text" id="trackName" name="trackName" required>
                 </div>
-                <br>
-                <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 5px;">
-                        <label for="album">Album:</label>
-                        <input type="text" id="album" name="album">
-                    </div>
-                    <div style="flex: 1;">
-                        <label for="year">Year:</label>
-                        <input type="number" id="year" name="year" required>
-                    </div>
+                <div style="flex: 1;">
+                <label for="artist">Artist:</label>
+                <input type="text" id="artist" name="artist" required>
                 </div>
-                <br>
-                <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 5px;">
-                        <label for="genre">Genre:</label>
-                        <input type="text" id="genre" name="genre" required>
-                    </div>
+            </div>
+            <br>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="flex: 1; margin-right: 5px;">
+                <label for="album">Album:</label>
+                <input type="text" id="album" name="album">
                 </div>
-                <br>
-                <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1;">
-                        <label for="cover">Cover:</label>
-                        <input type="file" id="cover" name="cover">
-                    </div>
+                <div style="flex: 1;">
+                <label for="year">Year:</label>
+                <input type="number" id="year" name="year" required>
                 </div>
-                <br>
-                <div style="display: flex; justify-content: space-between;">
-                    <div style="flex: 1; margin-right: 5px;">
-                        <label for="trackFile">Track File:</label>
-                        <input type="file" id="trackFile" name="trackFile" required>
-                    </div>
+            </div>
+            <br>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="flex: 1; margin-right: 5px;">
+                <label for="genre">Genre:</label>
+                <input type="text" id="genre" name="genre" required>
                 </div>
-                <br>
-                <button type="submit">Submit</button>
-                <button type="button" id="closeModalButton">Cancel</button>
+            </div>
+            <br>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="flex: 1;">
+                <label for="cover">Cover:</label>
+                <input type="file" id="cover" name="cover">
+                </div>
+            </div>
+            <br>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="flex: 1; margin-right: 5px;">
+                <label for="trackFile">Track File:</label>
+                <input type="file" id="trackFile" name="trackFile" required>
+                </div>
+            </div>
+            <br>
+            <button type="submit">Submit</button>
+            <button type="button" id="closeModalButton">Cancel</button>
             </form>
         `;
         modal.innerHTML = modalContent;
@@ -76,20 +76,38 @@ document.getElementById('submitTrackButton').addEventListener('click', function(
         document.body.appendChild(modal);
 
         // Close modal function
-        document.getElementById('closeModalButton').addEventListener('click', function() {
+        document.getElementById('closeModalButton').addEventListener('click', function () {
             document.body.removeChild(modal);
             openModal = false;
         });
 
         // Handle form submission
-        document.getElementById('submitTrackForm').addEventListener('submit', function(event) {
+        document.getElementById('submitTrackForm').addEventListener('submit', function (event) {
             event.preventDefault();
-            // Handle track submission logic here
-            alert('Track submitted!');
+            const formData = new FormData(this);
+            fetch('/song/submit', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    console.log(response)
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else {
+                        return response.text();
+                    }
+                })
+                .then(result => {
+                    if (result) {
+                        alert(result);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             document.body.removeChild(modal);
             openModal = false;
         });
-
         openModal = true;
-    }
+    };
 });

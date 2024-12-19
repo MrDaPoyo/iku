@@ -130,7 +130,7 @@ app.get('/auth/logout', loggedInMiddleware, (req, res) => {
     res.redirect('/auth/login');
 });
 
-app.get('/song/getSongsByUser/', loggedInMiddleware, (req, res) => {
+app.get('/song/getSongsByUser', loggedInMiddleware, (req, res) => {
     const userId = req.user.id;
     db.getTracksByUser(userId).then((result) => {
         res.json(result);
@@ -151,58 +151,72 @@ app.get('/song/get/:id', async (req, res) => {
     }
 });
 
+fs.ensureDirSync('uploads');
+fs.ensureDirSync('songs');
+fs.ensureDirSync('covers');
+
 app.get('/song/data/:id', async (req, res) => {
     const track = await db.getTrackStatsById(req.params.id);
     const stats = await track || { "error": "No data found" };
     res.json(await stats);
 });
 
-app.post('/song/submit', loggedInMiddleware, async (req, res) => {
-    upload.fields([{ name: 'track', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), async (req, res) => {
-        var { title, artist, album, year, genre } = req.body;
-        const trackFile = req.files['track'] ? req.files['track'][0] : null;
-        const coverFile = req.files['cover'] ? req.files['cover'][0] : null;
+app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), async (req, res) => {
+    console.log(JSON.stringify(req.body));
+    var { trackName, artist, album, year, genre } = req.body;
+    const trackFile = req.files['track'] ? req.files['track'][0] : null;
+    const coverFile = req.files['cover'] ? req.files['cover'][0] : null;
 
-        if (coverFile) {
-            var randomNumbers = Math.floor(100000 + Math.random() * 900000);
-            var coverPath = `covers/${randomNumbers}-${coverFile.originalname}`;
-            fs.moveSync(coverFile.path, coverPath);
-        }
-
-        if (!title || !artist || !album || !year || !genre || !trackFile) {
-            return res.redirect('/?msg=Please fill in all the fields');
-        }
-
-        if (trackFile) {
-            var length = await getAudioDurationInSeconds(trackFile.path);
-        } else {
-            var length = null;
-        }
-
-        const userId = req.user.id;
-        if (isNaN(year) || isNaN(length)) {
-            return res.redirect('/?msg=Year and length must be numbers');
-        }
-        if (typeof userId !== 'number') {
-            return res.redirect('/?msg=Invalid user ID');
-        }
-
+    if (coverFile) {
         var randomNumbers = Math.floor(100000 + Math.random() * 900000);
-        var trackPath = `songs/${randomNumbers}-${trackFile.originalname}`;
-        fs.moveSync(trackFile.path, trackPath);
+        var coverPath = `covers/${randomNumbers}-${coverFile.originalname}`;
+        fs.moveSync(coverFile.path, coverPath);
+    }
+    
+    var randomNumbers = Math.floor(100000 + Math.random() * 900000);
+    var trackPath = `songs/${randomNumbers}-${trackFile.originalname}`;
+    fs.moveSync(trackFile.path, trackPath);
 
-        try {
-            const result = await db.registerTrack(title, artist, album, year, genre, userId, trackPath, length, coverPath);
-            if (result) {
-                res.redirect('/?msg=Track submitted successfully');
-            } else {
-                res.redirect('/?msg=Failed to submit track');
-            }
-        } catch (error) {
-            res.redirect(`/?msg=${error}`);
+    if (!trackName || !artist || !year || !genre || !trackFile) {
+        fs.removeSync(tracjh);
+        if (coverFile) {
+            fs.removeSync(coverPath);
         }
+        console.log('Please fill in all the fields');
+        return res.status(400).send('Please fill in all the fields');
+    }
+
+    if (trackFile) {
+        var length = await getAudioDurationInSeconds(trackFile.path);
+    } else {
+        var length = null;
+    }
+
+    const userId = req.user.id;
+    if (isNaN(year) || isNaN(length)) {
+        console.log('Year abd length must be numbers');
+        return res.status(400).send('Year and length must be numbers');
+    }
+    if (typeof userId !== 'number') {
+        console.log('Invalid user ID');
+        return res.status(400).send('Invalid user ID');
+    }
+
+    try {
+        const result = await db.registerTrack(trackName, artist, album, year, genre, userId, trackPath, length, coverPath);
+        if (result) {
+            console.log('Track submitted successfully');
+            res.status(200).send('Track submitted successfully');
+        } else {
+            console.log('Failed to submit track');
+            res.status(500).send('Failed to submit track');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Failed to submit track');
     }
 });
+
 
 // Start the server
 app.listen(port, () => {
