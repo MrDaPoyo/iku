@@ -9,12 +9,10 @@
 }
 
 .dashboard {
-    height: 100vh;
-    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    height: 100vh;
+    width: 100%;
     position: relative;
     overflow: hidden;
 }
@@ -43,7 +41,18 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 83%;
+    flex-grow: 4;
+    overflow: scroll;
+    box-sizing: border-box;
+}
+
+.dashboard .mainContainer .contentContainer {
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .dashboard .mainContainer .audioPlayerContainer {
@@ -56,6 +65,8 @@
     background-color: var(--black);
     color: var(--white);
     padding: 20px;
+    position: absolute;
+    bottom: 0;
 }
 
 .audioPlayerContainer h1,
@@ -76,16 +87,6 @@
     justify-content: center;
     align-items: start;
     width: 100%;
-}
-
-.dashboard .mainContainer .contentContainer {
-    width: 100%;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
 }
 
 .audioPlayerVisualizer {
@@ -204,23 +205,51 @@
 }
 
 .trackContainer {
-    height: 100%;
+    height: calc(100% - 100px); /* Subtract the height of the AudioPlayerContainer */
     padding: 20px;
 }
 .trackContainer * {
     margin: 0;
     padding: 0;
 }
-.track-item {
-    background-color: var(--light-grey);
-    color: var(--black);
+.track {
+    background-color: var(--black);
+    color: var(--white);
     padding: 10px;
-    margin: 10px;
     border-radius: 5px;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    
+    margin-bottom: 10px;
+}
+
+.track-image {
+    width: 75px;
+    height: 75px;
+    background-color: var(--black);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.track-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.track-artist {
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.track-date {
+    font-size: 0.8rem;
+    margin-right: 10px;
+}
+
+.track-duration {
+    font-size: 0.8rem;
 }

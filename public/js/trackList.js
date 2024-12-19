@@ -7,39 +7,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         trackListContainer.className = 'track-list';
 
         songs.forEach(song => {
-            const trackItem = document.createElement('div');
-            trackItem.className = 'track-item';
+            const card = document.createElement('div');
+            card.className = 'track';
 
-            const title = document.createElement('h2');
-            const titleLink = document.createElement('a');
-            titleLink.href = `/?track_id=${song.id}`;
-            titleLink.textContent = song.title;
-            titleLink.style.flex = '2';
-            title.appendChild(titleLink);
+            const cardImage = document.createElement('div');
+            cardImage.className = 'track-image';
+            const img = document.createElement('img');
+            img.src = 'https://placehold.co/600x400'; // Placeholder image
+            img.alt = song.title;
+            cardImage.appendChild(img);
 
-            const artist = document.createElement('strong');
-            artist.textContent = `Made by ${song.artist}`;
-            artist.style.flex = '1';
+            const cardContent = document.createElement('div');
+            const cardTitle = document.createElement('div');
+            cardTitle.className = 'track-title';
+            cardTitle.textContent = song.title;
+            const cardArtist = document.createElement('div');
+            cardArtist.className = 'track-artist';
+            cardArtist.textContent = song.artist;
+            cardContent.appendChild(cardTitle);
+            cardContent.appendChild(cardArtist);
 
-            const album = document.createElement('small');
-            album.textContent = `${song.album}`;
-            album.style.flex = '1';
+            const cardDetails = document.createElement('div');
+            const cardDate = document.createElement('div');
+            cardDate.className = 'track-date';
+            cardDate.textContent = song.year; // Assuming year is the date
+            const cardDuration = document.createElement('div');
+            cardDuration.className = 'track-duration';
+            cardDuration.textContent = song.duration; // Assuming duration is available
+            cardDetails.appendChild(cardDate);
+            cardDetails.appendChild(cardDuration);
 
-            const year = document.createElement('h3');
-            year.textContent = `${song.year}`;
-            year.style.flex = '1';
+            card.appendChild(cardImage);
+            card.appendChild(cardContent);
+            card.appendChild(cardDetails);
 
-            const genre = document.createElement('p');
-            genre.textContent = `${song.genre}`;
-            genre.style.flex = '1';
-
-            trackItem.appendChild(title);
-            trackItem.appendChild(artist);
-            trackItem.appendChild(album);
-            trackItem.appendChild(year);
-            trackItem.appendChild(genre);
-
-            trackListContainer.appendChild(trackItem);
+            trackListContainer.appendChild(card);
         });
 
         document.getElementById("trackContainer").appendChild(trackListContainer);
