@@ -14,9 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.className = 'track';
             card.innerHTML = `
                 <a href="/?track_id=${song.id}" class="track-link">
-                    <div class="track-image">
-                        <img src="${song.cover || 'https://placehold.co/300'}" alt="${song.title}">
-                    </div>
+                    <img class="track-image" src="${song.cover || 'https://placehold.co/300'}" alt="${song.title}">
                     <div>
                         <h2 class="track-title">${song.title}</h2>
                         <div class="track-artist"><h3>${song.artist}</h3> - ${song.album}</div>
