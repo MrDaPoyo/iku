@@ -245,8 +245,13 @@
     margin-right: 10px;
 }
 
+.track-info {
+    width: 100%;
+}
+
 .track-artist {
     margin-right: 10px;
+    width: 100%;
 }
 
 .track-date {
