@@ -237,21 +237,27 @@
 }
 
 .track-title {
-    font-size: 2rem;
-    font-weight: bold;
     margin-right: 10px;
 }
 
 .track-artist {
-    font-size: 1rem;
     margin-right: 10px;
 }
 
 .track-date {
-    font-size: 0.8rem;
     margin-right: 10px;
 }
 
-.track-duration {
-    font-size: 0.8rem;
+.track-link {
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+.track-link * {
+    margin: 1vh;
 }

@@ -7,18 +7,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         trackListContainer.className = 'track-list';
 
         songs.forEach(song => {
+            const minutes = Math.floor(song.length / 60);
+            const seconds = song.length % 60;
+            const formattedLength = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
             const card = `
                 <div class="track">
-                    <div class="track-image">
-                        <img src="https://placehold.co/600x400" alt="${song.title}">
-                    </div>
+                    <a href="/?track_id=${song.id}" class="track-link">
+                        <div class="track-image">
+                            <img src="https://placehold.co/600x400" alt="${song.title}">
+                        </div>
+                        <div>
+                            <h2 class="track-title">${song.title}</h2>
+                            <div class="track-artist"><h3>${song.artist}</h3> - ${song.album}</div>
+                        </div>
+                    </a>
                     <div>
-                        <div class="track-title">${song.title}</div>
-                        <div class="track-artist">${song.artist}</div>
-                    </div>
-                    <div>
-                        <div class="track-date">${song.year}</div>
-                        <div class="track-duration">${song.duration}</div>
+                        <h4 class="track-date">${song.year}</h4>
+                        <h3 class="track-duration">${formattedLength}</h3>
                     </div>
                 </div>
             `;
