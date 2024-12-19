@@ -205,7 +205,7 @@
 }
 
 .trackContainer {
-    height: calc(100% - 100px); /* Subtract the height of the AudioPlayerContainer */
+    height: calc(100% - 20%); /* Subtract the height of the AudioPlayerContainer */
     padding: 20px;
 }
 .trackContainer * {
@@ -232,6 +232,8 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .track-title {
