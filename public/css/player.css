@@ -227,8 +227,8 @@
 }
 
 .track-image {
-    width: 75px;
-    height: 75px;
+    height: 8rem;
+    width: 8rem;
     background-color: var(--black);
     border-radius: 5px;
     display: flex;

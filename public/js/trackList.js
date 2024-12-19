@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.innerHTML = `
                 <a href="/?track_id=${song.id}" class="track-link">
                     <div class="track-image">
-                        <img src="https://placehold.co/600x400" alt="${song.title}">
+                        <img src="${song.cover || 'https://placehold.co/600x400'}" alt="${song.title}">
                     </div>
                     <div>
                         <h2 class="track-title">${song.title}</h2>
