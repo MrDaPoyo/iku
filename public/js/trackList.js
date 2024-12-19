@@ -41,7 +41,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.appendChild(cardContent);
             card.appendChild(cardDetails);
 
-            trackListContainer.appendChild(card);
+            const link = document.createElement('a');
+            link.id = `track-${song.id}`;
+            link.href = `/?track_id=${song.id}`; // Assuming you want a placeholder link
+            link.appendChild(card);
+
+            trackListContainer.appendChild(link);
         });
 
         document.getElementById("trackContainer").appendChild(trackListContainer);
