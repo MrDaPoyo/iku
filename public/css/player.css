@@ -208,6 +208,7 @@
 .trackContainer {
     height: calc(100% - 20%); /* Subtract the height of the AudioPlayerContainer */
     padding: 20px;
+    width: 100%;
 }
 .trackContainer * {
     margin: 0;
@@ -222,6 +223,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 .track-image {
