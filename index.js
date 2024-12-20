@@ -249,6 +249,22 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
 });
 
 
+app.get('/playlist/getPlaylistsByUser', loggedInMiddleware, (req, res) => {
+    const userId = req.user.id;
+    db.getPlaylistsByUser(userId).then((result) => {
+        res.json(result);
+    });
+});
+
+app.get('/playlist/get/:id', async (req, res) => {
+    const playlistId = req.params.id;
+    const playlist = await db.getPlaylistById(playlistId);
+    if (!playlist) {
+        return res.status(404).send('Playlist not found');
+    }
+    res.json(playlist);
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

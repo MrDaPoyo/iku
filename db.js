@@ -31,6 +31,26 @@ db.serialize(() => {
             );
         }
     });
+    db.get('SELECT COUNT(*) AS count FROM playlists', (err, row) => {
+        if (err) {
+            console.error(err.message);
+        } else if (row.count === 0) {
+            db.run('INSERT INTO playlists (name, user_id, cover) VALUES (?, ?, ?)', ['Sample Playlist', 1, null], function(err) {
+                if (err) {
+                    console.error(err.message);
+                } else {
+                    console.log('Sample playlist created successfully');
+                    db.run('INSERT INTO playlist_tracks (playlist_id, track_id) VALUES (?, ?)', [this.lastID, 1], (err) => {
+                        if (err) {
+                            console.error(err.message);
+                        } else {
+                            console.log('Sample track added to sample playlist successfully');
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
 
 
@@ -171,6 +191,69 @@ function getTracksByUser(user_id) {
     });
 }
 
+function getPlaylistsByUser(user_id) {
+    return new Promise((resolve, reject) => {
+        db.all('SELECT * FROM playlists WHERE user_id = ?', [user_id], (err, rows) => {
+            if (err) {
+                reject(false);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+function createPlaylist(name, user_id, cover) {
+    if (!name || !user_id) {
+        return Promise.resolve('Please fill in all the fields');
+    }
+    cover = cover || null;
+    return new Promise((resolve, reject) => {
+        db.run('INSERT INTO playlists (name, user_id, cover) VALUES (?, ?, ?)', [name, user_id, cover], (err) => {
+            if (err) {
+                console.warn(err.message);
+                reject(err.message);
+            } else {
+                console.log('Playlist created successfully');
+                resolve(true);
+            }
+        });
+    });
+}
+
+function addTrackToPlaylist(playlist_id, track_id) {
+    return new Promise((resolve, reject) => {
+        db.run('INSERT INTO playlist_tracks (playlist_id, track_id) VALUES (?, ?)', [playlist_id, track_id], (err) => {
+            if (err) {
+                console.warn(err.message);
+                reject(err.message);
+            } else {
+                console.log('Track added to playlist successfully');
+                resolve(true);
+            }
+        });
+    });
+}
+
+function getPlaylistById(id) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM playlists WHERE id = ?', [id], (err, row) => {
+            if (err) {
+                reject(false);
+            } else {
+                db.all('SELECT * FROM playlist_tracks WHERE playlist_id = ?', [id], (err, rows) => {
+                    if (err) {
+                        reject(false);
+                    } else {
+                        row.tracks = rows.map(row => row.track_id);
+                        resolve(row);
+                    }
+                });
+            }
+        });
+    });
+}
+
 module.exports = {
     db,
     registerUser,
@@ -183,4 +266,8 @@ module.exports = {
     getTracksByUser,
     getTrackStatsById,
     registerTrack,
+    getPlaylistsByUser,
+    createPlaylist,
+    addTrackToPlaylist,
+    getPlaylistById
 };
