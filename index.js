@@ -154,7 +154,6 @@ app.get('/song/get/:id', async (req, res) => {
 app.get('/song/getCover/:id', async (req, res) => {
     const songId = req.params.id;
     const trackStats = await db.getTrackStatsById(songId);
-    console.log(trackStats);
     if (!trackStats) {
         return res.status(404).send('Song not found');
     }
