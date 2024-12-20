@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('/song/getSongsByUser');
         const songs = await response.json();
 
+        if (!songs.length) {
+            const noTracks = document.createElement('h2');
+            noTracks.textContent = 'No tracks found, try uploading one first!';
+            document.getElementById("trackContainer").appendChild(noTracks);
+            return;
+        }
+
         const trackListContainer = document.createElement('div');
         trackListContainer.className = 'track-list';
         songs.forEach(song => {
