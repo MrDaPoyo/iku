@@ -245,8 +245,12 @@ function getPlaylistById(id) {
                     if (err) {
                         reject(false);
                     } else {
-                        row.tracks = rows.map(row => row.track_id);
-                        resolve(row);
+                        if (row) {
+                            row.tracks = rows.map(row => row.track_id);
+                            resolve(row);
+                        } else {
+                            resolve(null);
+                        }
                     }
                 });
             }
