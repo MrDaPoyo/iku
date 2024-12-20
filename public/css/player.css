@@ -70,6 +70,7 @@
     flex-grow: 4;
     overflow: auto;
     box-sizing: border-box;
+    max-height: 100%;
 }
 
 .dashboard .mainContainer .trackContainer {
@@ -94,6 +95,8 @@
     color: var(--white);
     padding: 20px;
     z-index: 10;
+    height: 20%;
+    overflow: hidden;
 }
 
 .audioPlayerContainer h1,
@@ -106,6 +109,27 @@
 .audioPlayerContainer strong {
     margin: 0;
     padding: 0;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.playlistContainer {
+    width: 30%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-grow: 1;
 }
 
 .audioPlayerContainer .column-container {
@@ -151,15 +175,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .audioPlayerControls button {
-    margin: 10px;
+    margin: auto;
     background-color: transparent;
     color: var(--white);
     border-radius: 5px;
     cursor: pointer;
-    margin: 10px;
 }
 
 .audioPlayerControls button:hover {
@@ -250,6 +275,7 @@
     align-items: center;
     margin-bottom: 10px;
     width: 100%;
+    transition: 0.2s;
 }
 
 .track-image {
@@ -293,7 +319,64 @@
     flex-direction: row;
     height: 100%;
     width: 100%;
+    transition: 0.2s;
 }
 .track-link * {
     margin: 1vh;
+}
+
+.track:hover {
+    transform: scale(1.01);
+}
+
+.playlistItem {
+    text-decoration: none;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    background-color: var(--black);
+    border: 1px solid var(--light-grey);
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    max-width: fit-content;
+}
+
+.playlist-link {
+    text-decoration: none;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    background-color: var(--black);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.playlistItem:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.playlist-image {
+    width: 50%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.playlist-info {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.playlist-title {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.playlist-description {
+    font-size: 1em;
+    color: #666;
 }

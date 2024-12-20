@@ -1,17 +1,22 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const response = await fetch('/song/getSongsByUser');
-        const songs = await response.json();
+        const [songsResponse, playlistsResponse] = await Promise.all([
+            fetch('/song/getSongsByUser'),
+            fetch('/playlist/getPlaylistsByUser')
+        ]);
+        const songs = await songsResponse.json();
+        const playlists = await playlistsResponse.json();
 
-        if (!songs.length) {
+        if (!songs.length && !playlists.length) {
             const noTracks = document.createElement('h2');
-            noTracks.textContent = 'No tracks found, try uploading one first!';
+            noTracks.textContent = 'No tracks or playlists found, try uploading or creating one first!';
             document.getElementById("trackContainer").appendChild(noTracks);
             return;
         }
 
         const trackListContainer = document.createElement('div');
         trackListContainer.className = 'track-list';
+
         songs.forEach(song => {
             const minutes = Math.floor(song.length / 60);
             const seconds = song.length % 60;
@@ -34,7 +39,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
             document.getElementById("trackContainer").appendChild(card);
         });
+
+        playlists.forEach(playlist => {
+            const card = document.createElement('div');
+            card.className = 'playlistItem';
+            card.innerHTML = `
+                <a href="/?playlist_id=${playlist.id}" class="playlist-link">
+                    <img class="playlist-image" src="${playlist.cover ? `/playlist/getCover/${playlist.id}` : 'https://placehold.co/300'}" alt="${playlist.title}">
+                    <div class="playlist-info">
+                        <h3 class="playlist-title">${playlist.name}</h3>
+                        <p class="playlist-description">${playlist.description}</p>
+                    </div>
+                </a>
+            `;
+            document.getElementById("playlistContainer").appendChild(card);
+        });
     } catch (error) {
-        console.error('Error fetching songs:', error);
+        console.error('Error fetching songs or playlists:', error);
     }
 });

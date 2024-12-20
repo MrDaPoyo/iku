@@ -13,7 +13,7 @@ db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT, fav_genre TEXT)');
     db.run('CREATE TABLE IF NOT EXISTS tracks (id INTEGER PRIMARY KEY, title TEXT, artist TEXT, album TEXT, year INTEGER, genre TEXT, length INTEGER, user_id INTEGER, path TEXT UNIQUE NOT NULL, cover TEXT, FOREIGN KEY (user_id) REFERENCES users(id))');
     db.run('CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, content TEXT, post_id INTEGER, user_id INTEGER, FOREIGN KEY (post_id) REFERENCES posts(id), FOREIGN KEY (user_id) REFERENCES users(id))');
-    db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY, name TEXT, user_id INTEGER, cover TEXT, FOREIGN KEY (user_id) REFERENCES users(id))');
+    db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY, name TEXT REQUIRED, description TEXT, user_id INTEGER, cover TEXT, FOREIGN KEY (user_id) REFERENCES users(id))');
     db.run('CREATE TABLE IF NOT EXISTS playlist_tracks (playlist_id INTEGER, track_id INTEGER, PRIMARY KEY (playlist_id, track_id), FOREIGN KEY (playlist_id) REFERENCES playlists(id), FOREIGN KEY (track_id) REFERENCES tracks(id))');
     db.get('SELECT COUNT(*) AS count FROM tracks', (err, row) => {
         if (err) {
@@ -35,7 +35,7 @@ db.serialize(() => {
         if (err) {
             console.error(err.message);
         } else if (row.count === 0) {
-            db.run('INSERT INTO playlists (name, user_id, cover) VALUES (?, ?, ?)', ['Sample Playlist', 1, null], function(err) {
+            db.run('INSERT INTO playlists (name, description, user_id, cover) VALUES (?, ?, ?, ?)', ['Sample Playlist', 'A sample description for this sample playlist', 1, null], function(err) {
                 if (err) {
                     console.error(err.message);
                 } else {
@@ -203,13 +203,14 @@ function getPlaylistsByUser(user_id) {
     });
 }
 
-function createPlaylist(name, user_id, cover) {
+function createPlaylist(name, description, user_id, cover) {
     if (!name || !user_id) {
         return Promise.resolve('Please fill in all the fields');
     }
     cover = cover || null;
+    description = description || null;
     return new Promise((resolve, reject) => {
-        db.run('INSERT INTO playlists (name, user_id, cover) VALUES (?, ?, ?)', [name, user_id, cover], (err) => {
+        db.run('INSERT INTO playlists (name, description, user_id, cover) VALUES (?, ?, ?, ?)', [name, description, user_id, cover], (err) => {
             if (err) {
                 console.warn(err.message);
                 reject(err.message);
