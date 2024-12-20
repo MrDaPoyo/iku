@@ -43,11 +43,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         playlists.forEach(async playlist => {
             const card = document.createElement('div');
             card.className = 'playlistItem';
-            const trackTitles = playlist.tracks.map(async trackId => {
-                const response = await fetch(`/song/getSongById/${trackId}`);
+            const trackTitles = await Promise.all(playlist.tracks.map(async trackId => {
+                const response = await fetch(`/song/data/${trackId}`);
                 const track = await response.json();
                 return track.title;
-            });
+            }));
 
             card.innerHTML = `
                 <a href="/?playlist_id=${playlist.id}" class="playlist-link">
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="playlist-info">
                         <h3 class="playlist-title">${playlist.name}</h3>
                         <p class="playlist-description">${playlist.description}</p>
-                        <p class="playlist-tracks">${trackTitles.join(', ')}</p>
+                        <small class="playlist-tracks">${trackTitles.join(', ')}</small>
                     </div>
                 </a>
             `;
