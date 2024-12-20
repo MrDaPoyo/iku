@@ -2,3 +2,4 @@ node_modules
 iku.db
 .env
 songs/*
+covers/*

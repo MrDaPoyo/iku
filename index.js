@@ -151,6 +151,21 @@ app.get('/song/get/:id', async (req, res) => {
     }
 });
 
+app.get('/song/getCover/:id', async (req, res) => {
+    const songId = req.params.id;
+    const trackStats = await db.getTrackStatsById(songId);
+    console.log(trackStats);
+    if (!trackStats) {
+        return res.status(404).send('Song not found');
+    }
+    const coverPath = path.join('covers', await trackStats.cover);
+    if (fs.existsSync(coverPath)) {
+        res.sendFile(path.resolve(coverPath));
+    } else {
+        res.status(404).send('Cover not found');
+    }
+});
+
 fs.ensureDirSync('uploads');
 fs.ensureDirSync('songs');
 fs.ensureDirSync('covers');
@@ -216,7 +231,7 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
     }
 
     try {
-        coverPath = coverPath || null;
+        coverPath = path.basename(coverPath);
         const result = await db.registerTrack(trackName, artist, album, year, genre, userId, path.basename(trackPath), Math.round(length), coverPath);
         if (result) {
             console.log('Track submitted successfully');
