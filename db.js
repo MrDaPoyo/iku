@@ -197,8 +197,17 @@ function getPlaylistsByUser(user_id) {
             if (err) {
                 reject(false);
             } else {
-                resolve(rows);
-            }
+                db.all('SELECT * FROM playlist_tracks WHERE playlist_id IN (' + rows.map(row => row.id).join(',') + ')', (err, tracks) => {
+                    if (err) {
+                        reject(false);
+                    } else {
+                        rows.forEach(row => {
+                            row.tracks = tracks.filter(track => track.playlist_id === row.id).map(track => track.track_id);
+                        });
+                        resolve(rows);
+                    }
+                }
+            )};
         });
     });
 }

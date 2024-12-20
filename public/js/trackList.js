@@ -40,15 +40,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById("trackContainer").appendChild(card);
         });
 
-        playlists.forEach(playlist => {
+        playlists.forEach(async playlist => {
             const card = document.createElement('div');
             card.className = 'playlistItem';
+            const trackTitles = playlist.tracks.map(async trackId => {
+                const response = await fetch(`/song/getSongById/${trackId}`);
+                const track = await response.json();
+                return track.title;
+            });
+
             card.innerHTML = `
                 <a href="/?playlist_id=${playlist.id}" class="playlist-link">
                     <img class="playlist-image" src="${playlist.cover ? `/playlist/getCover/${playlist.id}` : 'https://placehold.co/300'}" alt="${playlist.title}">
                     <div class="playlist-info">
                         <h3 class="playlist-title">${playlist.name}</h3>
                         <p class="playlist-description">${playlist.description}</p>
+                        <p class="playlist-tracks">${trackTitles.join(', ')}</p>
                     </div>
                 </a>
             `;

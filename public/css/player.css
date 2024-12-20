@@ -133,6 +133,11 @@
     flex-grow: 1;
 }
 
+.playlistContainer h1 {
+    margin: 0;
+    padding: 0;
+}
+
 .audioPlayerContainer .column-container {
     display: flex;
     flex-direction: column;
@@ -380,4 +385,41 @@
 .playlist-description {
     font-size: 1em;
     color: #666;
+}
+
+@media screen and (max-width: 768px) {
+    .dashboardHeader {
+        height: 10%;
+    }
+
+    .dashboardHeaderRight {
+        display: none;
+    }
+    .contentContainer {
+        flex-grow: 1;
+        flex-direction: column;
+    }
+
+    .dashboard .mainContainer .audioPlayerContainer {
+        flex-direction: column;
+        height: 20%;
+        justify-content: center;
+        align-items: center;
+    }
+    .playlistContainer {
+        width: 100%;
+    }
+    .playlistItem {
+        flex-direction: column;
+        align-items: center;
+        max-height: 10vh;
+    }
+
+    .audioPlayerVisualizer {
+        display: none;
+    }
+
+    .trackContainer {
+        height: calc(100% - 30%);
+    }
 }
