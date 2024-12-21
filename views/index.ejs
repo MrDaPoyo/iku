@@ -26,48 +26,6 @@
             </div>
         </div>
         <div class="audioPlayerContainer">
-            <% if (typeof currentPlaylist !=='undefined' && currentPlaylist) { %>
-                <script>
-                    var currentPlaylist = <% - JSON.stringify(currentPlaylist) %>;
-                    var urlParams = new URLSearchParams(window.location.search);
-                    var playlistIndex = urlParams.get('playlist_index');
-                    if (!playlistIndex) {
-                        playlistIndex = 0;
-                    }
-                    var trackListContainer = document.createElement('div');
-                    trackListContainer.className = 'trackListContainer w-25 h-100';
-                    currentPlaylist.tracks.forEach(track => {
-                        fetch('/song/data/' + track)
-                            .then(response => response.json())
-                            .then(data => {
-                                var trackItem = document.createElement('div');
-                                trackItem.className = 'trackItem';
-                                trackItem.setAttribute('data-index', currentPlaylist.tracks.indexOf(track));
-                                trackItem.textContent = `${data.title ? data.title : "No Title"} - ${data.artist ? data.artist : "Unknown"}`;
-                                if (currentPlaylist.tracks.indexOf(track) == playlistIndex) {
-                                    trackItem.style.color = 'green';
-                                }
-                                trackListContainer.appendChild(trackItem);
-                                if (currentPlaylist.tracks.indexOf(track) === 0) {
-                                    trackItem.classList.add('currentTrack');
-                                }
-                            })
-                            .catch(error => console.error('Error fetching song stats:', error));
-                    });
-                    document.querySelector('.audioPlayerContainer').appendChild(trackListContainer);
-
-                    var trackItems = document.querySelectorAll('.trackItem');
-                    trackItems.forEach(item => {
-                        item.addEventListener('click', function () {
-                            var index = this.getAttribute('data-index');
-                            // Logic to play the selected track
-                            document.querySelector('.currentTrack').classList.remove('currentTrack');
-                            this.classList.add('currentTrack');
-                        });
-                    });
-                    localStorage.setItem('currentPlaylist', JSON.stringify(currentPlaylist));
-                </script>
-                <% } %>
                     <div class="column-container w-100">
                         <%- include('audioPlayer') %>
                     </div>

@@ -273,13 +273,32 @@ app.get('/playlist/getPlaylistsByUser', loggedInMiddleware, (req, res) => {
     });
 });
 
-app.get('/playlist/get/:id', async (req, res) => {
+app.get('/playlist/get/:id', loggedInMiddleware, async (req, res) => {
     const playlistId = req.params.id;
     const playlist = await db.getPlaylistById(playlistId);
     if (!playlist) {
         return res.status(404).send('Playlist not found');
     }
     res.json(playlist);
+});
+
+app.get('/playlist/get/:id/getTrack/:index', loggedInMiddleware, async (req, res) => {
+    const playlistId = req.params.id;
+    const playlist = await db.getPlaylistById(playlistId);
+    if (!playlist) {
+        return res.status(404).send('Playlist not found');
+    }
+    const index = req.params.index;
+    if (index >= playlist.tracks.length) {
+        return res.status(404).send('Track not found');
+    }
+    const songId = playlist.tracks[index];
+    const trackStats = await db.getTrackStatsById(songId);
+    if (!trackStats) {
+        return res.status(404).send('Track not found');
+    }
+    db.updateUserTrackStatus(req.user.id, songId, playlistId, songId, index);
+    return res.sendFile(path.resolve(`songs/${trackStats.path}`));
 });
 
 app.post('/playlist/create', loggedInMiddleware, async (req, res) => {
