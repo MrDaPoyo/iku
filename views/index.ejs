@@ -36,13 +36,13 @@
                         fetch('/song/data/' + track)
                             .then(response => response.json())
                             .then(data => {
-                                console.log("Playlist Song: " + data);
                                 var trackItem = document.createElement('div');
                                 trackItem.className = 'trackItem';
                                 trackItem.setAttribute('data-index', currentPlaylist.tracks.indexOf(track));
                                 trackItem.textContent = `${data.title ? data.title : "No Title"} - ${data.artist ? data.artist : "Unknown"}`;
-                                playlist_index = currentPlaylist.tracks.indexOf(track);
-                                if (data.id === playlist_index) {
+                                var urlParams = new URLSearchParams(window.location.search);
+                                var playlistIndex = urlParams.get('playlist_index');
+                                if (currentPlaylist.tracks.indexOf(track) == playlistIndex) {
                                     trackItem.style.color = 'green';
                                 }
                                 trackListContainer.appendChild(trackItem);
