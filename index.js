@@ -79,7 +79,7 @@ app.get('/', loggedInMiddleware, (req, res) => {
             if (result) {
                 let playlistIndex = parseInt(req.query.playlist_index) || 0;
                 if (playlistIndex >= result.tracks.length) {
-                    playlistIndex = result.tracks.length - 1;
+                    playlistIndex = 0;
                 }
                 res.render('index', { title: 'Home', playlist: result, playlistIndex: playlistIndex });
             } else {
