@@ -75,18 +75,19 @@ app.use(generalMiddleware);
 app.get('/', loggedInMiddleware, (req, res) => {
     const playlistId = req.query.playlist_id;
     if (playlistId) {
-        db.getPlaylistById(playlistId).then(async (playlist) => {
-            if (playlist) {
-                res.render('index', { title: 'Home', currentPlaylist: playlist });
+        db.getPlaylistById(playlistId).then((result) => {
+            if (result) {
+                let playlistIndex = parseInt(req.query.playlist_index) || 0;
+                if (playlistIndex >= result.tracks.length) {
+                    playlistIndex = result.tracks.length - 1;
+                }
+                res.render('index', { title: 'Home', playlist: result, playlistIndex: playlistIndex });
             } else {
-                res.render('index', { title: 'Home', currentPlaylist: [] });
+                res.redirect('/');
             }
-        }).catch((err) => {
-            console.error(err);
-            res.render('index', { title: 'Home', currentPlaylist: [] });
         });
     } else {
-        res.render('index', { title: 'Home', currentPlaylist: [] });
+        res.render('index', { title: 'Home' });
     }
 });
 

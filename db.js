@@ -249,6 +249,36 @@ function updateUserTrackStatus(userId, lastPlaylist, lastPlaylistTrack, lastTrac
     });
 }
 
+function getUserStatusByPlaylistId(userId, playlistId) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM users WHERE id = ?', [userId], (err, user) => {
+            if (err) {
+                reject(err.message);
+            } else {
+                db.get('SELECT * FROM playlists WHERE id = ?', [playlistId], (err, playlist) => {
+                    if (err) {
+                        reject(err.message);
+                    } else {
+                        db.all('SELECT * FROM playlist_tracks WHERE playlist_id = ?', [playlistId], (err, tracks) => {
+                            if (err) {
+                                reject(err.message);
+                            } else {
+                                resolve({
+                                    user: user,
+                                    playlist: {
+                                        ...playlist,
+                                        tracks: tracks.map(track => track.track_id)
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+}
+
 function addTrackToPlaylist(playlist_id, track_id) {
     return new Promise((resolve, reject) => {
         db.run('INSERT INTO playlist_tracks (playlist_id, track_id) VALUES (?, ?)', [playlist_id, track_id], (err) => {
@@ -302,5 +332,6 @@ module.exports = {
     createPlaylist,
     addTrackToPlaylist,
     getPlaylistById,
-    updateUserTrackStatus
+    updateUserTrackStatus,
+    getUserStatusByPlaylistId
 };
