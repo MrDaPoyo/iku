@@ -265,6 +265,28 @@ app.get('/playlist/get/:id', async (req, res) => {
     res.json(playlist);
 });
 
+app.post('/playlist/create', loggedInMiddleware, async (req, res) => {
+    var { name, description } = req.body;
+    const userId = req.user.id;
+    const cover = req.body.cover || null;
+    var description = description || "No description provided :P";
+
+    if (!name) {
+        return res.status(400).send('Please fill in all the fields');
+    }
+
+    try {
+        const result = await createPlaylist(name, description, userId, cover);
+        if (result === true) {
+            res.status(200).send('Playlist created successfully');
+        } else {
+            res.status(400).send(result);
+        }
+    } catch (error) {
+        res.status(500).send('Failed to create playlist');
+    }
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

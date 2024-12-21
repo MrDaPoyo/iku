@@ -1,12 +1,12 @@
-let openModal = false;
+let trackOpenModal = false;
 
 document.getElementById('submitTrackButton').addEventListener('click', function () {
-    if (openModal) {
+    if (trackOpenModal) {
         const existingModal = document.getElementById('submitTrackModal');
         if (existingModal) {
             document.body.removeChild(existingModal);
         }
-        openModal = false;
+        trackOpenModal = false;
     } else {
         // Create modal elements
         const modal = document.createElement('div');
@@ -19,7 +19,22 @@ document.getElementById('submitTrackButton').addEventListener('click', function 
         modal.style.padding = '20px';
         modal.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
         modal.style.zIndex = '1000';
+        const overlay = document.createElement('div');
+        overlay.id = 'modalOverlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        overlay.style.zIndex = '999';
+        document.body.appendChild(overlay);
 
+        overlay.addEventListener('click', function () {
+            document.body.removeChild(modal);
+            document.body.removeChild(overlay);
+            trackOpenModal = false;
+        });
         const modalContent = `
             <h2>Submit Track</h2>
             <form id="submitTrackForm" method="POST" enctype="multipart/form-data" action="/song/submit">
@@ -78,7 +93,7 @@ document.getElementById('submitTrackButton').addEventListener('click', function 
         // Close modal function
         document.getElementById('closeModalButton').addEventListener('click', function () {
             document.body.removeChild(modal);
-            openModal = false;
+            trackOpenModal = false;
         });
 
         // Handle form submission
@@ -107,8 +122,8 @@ document.getElementById('submitTrackButton').addEventListener('click', function 
                     console.error('Error:', error);
                 });
             document.body.removeChild(modal);
-            openModal = false;
+            trackOpenModal = false;
         });
-        openModal = true;
+        trackOpenModal = true;
     };
 });
