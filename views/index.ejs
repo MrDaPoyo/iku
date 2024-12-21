@@ -5,8 +5,6 @@
             <img src="/images/FullLogo.svg" alt="Logo" class="logo">
             <div class="dashboardHeaderRight">
                 <h1>Track Player</h1>
-                <button id="submitTrackButton" class="submitTrackButton">Submit Track</button>
-                <script src="/js/submit.js" defer></script>
             </div>
         </div>
         <div class="mainContainer">
@@ -15,7 +13,11 @@
                     <h2>Playlists</h2>
                 </div>
                 <div class="trackContainer" id="trackContainer">
-                    <h2>Tracks</h2>
+                    <div class="row-container w-100 align-center">
+                        <h2>Tracks</h2>
+                        <button id="submitTrackButton" class="submitTrackButton">Add a Track</button>
+                    </div>
+                    <script src="/js/submit.js" defer></script>
                     <script src="/js/trackList.js"></script>
                 </div>
             </div>

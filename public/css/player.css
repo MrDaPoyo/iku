@@ -393,6 +393,24 @@
     margin: 10px;
 }
 
+.submitTrackButton {
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid var(--white);
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.1s;
+    color: var(--white);
+    background-color: var(--black);
+}
+
+.submitTrackButton:hover {
+    background-color: var(--white);
+    color: var(--black);
+    border: 1px solid var(--black);
+}
+
 @media screen and (max-width: 768px) {
     .dashboardHeader {
         height: 10%;
