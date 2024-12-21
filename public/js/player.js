@@ -8,14 +8,25 @@ analyser.connect(audioCtx.destination);
 
 const canvas = document.getElementById('audioVisualizer');
 const canvasCtx = canvas.getContext('2d');
-const songId = new URLSearchParams(window.location.search).get('track_id') || 1;
+let songId = new URLSearchParams(window.location.search).get('track_id') || 1;
+const playlistId = new URLSearchParams(window.location.search).get('playlist_id');
+let playlistIndex = new URLSearchParams(window.location.search).get('playlist_index') || 0;
 
-if (new URLSearchParams(window.location.search).get('playlist_id')) {
-    var playlistIndex = new URLSearchParams(window.location.search).get('playlist_index');
-}
+function selectSong(songId, playlistId, playlistIndex) {
+    let songUrl;
+    if (playlistId) {
+        songUrl = `/playlist/get/${playlistId}/getTrack/${playlistIndex}`;
+    } else {
+        songUrl = `/song/get/${songId}`;
+    }
+    audioElement.src = songUrl;
+    audioElement.onerror = () => {
+        console.error('Failed to load the song.');
+        document.getElementById('title-artist').innerText = "Absolutely No One";
+        const titleText = document.getElementById('title-text');
+        titleText.innerText = `Song not found.`;
+    };
 
-function selectSong(songId) {
-    audioElement.src = `/song/get/${songId}`;
     fetch(`/song/data/${songId}`)
         .then(response => response.json())
         .then(data => {
@@ -40,7 +51,7 @@ function selectSong(songId) {
         .catch(error => console.error('Error fetching song data:', error));
 }
 
-selectSong(songId);
+selectSong(songId, playlistId, playlistIndex);
 
 function draw() {
     requestAnimationFrame(draw);
@@ -172,7 +183,11 @@ document.getElementById('pastButton').addEventListener('click', () => {
     // Implement the logic for the past button
     console.log('Past button clicked');
 });
+let currentTrackInterval;
 
+audioElement.addEventListener('pause', () => {
+    clearInterval(currentTrackInterval);
+});
 document.getElementById('stopButton').addEventListener('click', () => {
     audioElement.pause();
     audioElement.currentTime = 0;
@@ -180,4 +195,21 @@ document.getElementById('stopButton').addEventListener('click', () => {
 
 audioElement.addEventListener('pause', () => {
     clearInterval(currentTrackInterval);
+});
+
+audioElement.addEventListener('ended', () => {
+    if (playlistId) {
+        fetch(`/playlist/get/${playlistId}/nextTrack`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Next track:', data);
+                if (data.id) {
+                    selectSong(data.id, playlistId, playlistIndex);
+                    audioElement.play();
+                } else {
+                    console.warn('No next track found');
+                }
+            })
+            .catch(error => console.error('Error fetching next track:', error));
+    }
 });

@@ -301,6 +301,32 @@ app.get('/playlist/get/:id/getTrack/:index', loggedInMiddleware, async (req, res
     return res.sendFile(path.resolve(`songs/${trackStats.path}`));
 });
 
+app.get('/playlist/get/:id/nextTrack', loggedInMiddleware, async (req, res) => {
+    const playlistId = req.params.id;
+    const playlist = await db.getPlaylistById(playlistId);
+    if (!playlist) {
+        return res.status(404).send('Playlist not found');
+    }
+    const trackIndex = await db.getUserStatusByPlaylistId(playlistId);
+    if (!trackIndex) {
+        return res.status(404).send('Track not found');
+    }
+    const nextIndex = trackIndex + 1;
+    if (nextIndex >= playlist.tracks.length) {
+        return res.status(404).send('Track not found');
+    }
+    var songId = playlist.tracks[nextIndex];
+    if (!songId) {
+        songId = playlist.tracks[0];
+    }
+    const trackStats = await db.getTrackStatsById(songId);
+    if (!trackStats) {
+        return res.status(404).send('Track not found');
+    }
+    db.updateUserTrackStatus(req.user.id, songId, playlistId, songId, nextIndex);
+    return res.json({ ...trackStats, playlistIndex: nextIndex });
+});
+
 app.post('/playlist/create', loggedInMiddleware, async (req, res) => {
     var { name, description } = await req.body;
     const userId = await req.user.id;
