@@ -73,7 +73,22 @@ app.use(generalMiddleware);
 
 // Define a route
 app.get('/', loggedInMiddleware, (req, res) => {
-    res.render('index', { title: 'Home' });
+    const playlistId = req.query.playlist_id;
+    if (playlistId) {
+        db.getPlaylistById(playlistId).then(async (playlist) => {
+            if (playlist) {
+                console.log(playlist);
+                res.render('index', { title: 'Home', currentPlaylist: playlist });
+            } else {
+                res.render('index', { title: 'Home', currentPlaylist: [] });
+            }
+        }).catch((err) => {
+            console.error(err);
+            res.render('index', { title: 'Home', currentPlaylist: [] });
+        });
+    } else {
+        res.render('index', { title: 'Home', currentPlaylist: [] });
+    }
 });
 
 app.get('/auth/login', notLoggedInMiddleware, (req, res) => {
@@ -137,14 +152,16 @@ app.get('/song/getSongsByUser', loggedInMiddleware, (req, res) => {
     });
 });
 
-app.get('/song/get/:id', async (req, res) => {
+app.get('/song/get/:id', loggedInMiddleware, async (req, res) => {
     const songId = req.params.id;
+    const userId = req.user.id;
     const trackStats = await db.getTrackStatsById(songId);
     if (!trackStats) {
         return res.status(404).send('Song not found');
     }
     const songPath = path.join('songs', trackStats.path);
     if (fs.existsSync(songPath)) {
+        db.updateUserTrackStatus(userId, songId, null, songId, 0);
         res.sendFile(path.resolve(songPath));
     } else {
         res.status(404).send('Song not found');
@@ -194,7 +211,7 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
         var coverPath = `covers/${randomNumbers}-${coverFile.originalname}`;
         fs.moveSync(coverFile.path, coverPath);
     }
-    
+
     if (trackFile) {
         var randomNumbers = Math.floor(100000 + Math.random() * 900000);
         var trackPath = `songs/${randomNumbers}-${trackFile.originalname}`;
