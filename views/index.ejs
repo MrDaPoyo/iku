@@ -29,7 +29,6 @@
             <% if (typeof currentPlaylist !== 'undefined' && currentPlaylist) { %>
                 <script>
                     var currentPlaylist = <%- JSON.stringify(currentPlaylist) %>;
-                    console.log(currentPlaylist);
                     var trackListContainer = document.createElement('div');
                     trackListContainer.className = 'trackListContainer w-25 h-100';
                     currentPlaylist.tracks.forEach(track => {
@@ -63,6 +62,7 @@
                             this.classList.add('currentTrack');
                         });
                     });
+                    localStorage.setItem('currentPlaylist', JSON.stringify(currentPlaylist));
                 </script>
                 <% } %>
                     <div class="column-container w-100">
