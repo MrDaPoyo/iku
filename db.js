@@ -10,7 +10,7 @@ var db = new sqlite3.Database('iku.db', (err) => {
 });
 
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT, fav_genre TEXT, lastPlaylist INTEGER, lastPlaylistTrack INTEGER, lastTrack INTEGER)');
+    db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT, fav_genre TEXT, lastPlaylist INTEGER, lastPlaylistTrack INTEGER, lastTrack INTEGER, lastTrackTime INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS tracks (id INTEGER PRIMARY KEY, title TEXT, artist TEXT, album TEXT, year INTEGER, genre TEXT, length INTEGER, user_id INTEGER, path TEXT UNIQUE NOT NULL, cover TEXT, FOREIGN KEY (user_id) REFERENCES users(id))');
     db.run('CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, content TEXT, post_id INTEGER, user_id INTEGER, FOREIGN KEY (post_id) REFERENCES posts(id), FOREIGN KEY (user_id) REFERENCES users(id))');
     db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY, name TEXT REQUIRED, description TEXT, user_id INTEGER, cover TEXT, FOREIGN KEY (user_id) REFERENCES users(id))');
@@ -231,6 +231,24 @@ function createPlaylist(name, description, user_id, cover) {
     });
 }
 
+function updateUserTrackStatus(userId, lastPlaylist, lastPlaylistTrack, lastTrack, lastTrackTime) {
+    return new Promise((resolve, reject) => {
+        db.run(
+            'UPDATE users SET lastPlaylist = COALESCE(?, lastPlaylist), lastPlaylistTrack = COALESCE(?, lastPlaylistTrack), lastTrack = COALESCE(?, lastTrack), lastTrackTime = COALESCE(?, lastTrackTime) WHERE id = ?',
+            [lastPlaylist, lastPlaylistTrack, lastTrack, lastTrackTime, userId],
+            (err) => {
+            if (err) {
+                console.warn(err.message);
+                reject(err.message);
+            } else {
+                console.log('User status updated successfully');
+                resolve(true);
+            }
+            }
+        );
+    });
+}
+
 function addTrackToPlaylist(playlist_id, track_id) {
     return new Promise((resolve, reject) => {
         db.run('INSERT INTO playlist_tracks (playlist_id, track_id) VALUES (?, ?)', [playlist_id, track_id], (err) => {
@@ -283,5 +301,6 @@ module.exports = {
     getPlaylistsByUser,
     createPlaylist,
     addTrackToPlaylist,
-    getPlaylistById
+    getPlaylistById,
+    updateUserTrackStatus
 };
