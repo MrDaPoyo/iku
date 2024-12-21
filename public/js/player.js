@@ -10,6 +10,10 @@ const canvas = document.getElementById('audioVisualizer');
 const canvasCtx = canvas.getContext('2d');
 const songId = new URLSearchParams(window.location.search).get('track_id') || 1;
 
+if (new URLSearchParams(window.location.search).get('playlist_id')) {
+    var playlistIndex = new URLSearchParams(window.location.search).get('playlist_index');
+}
+
 function selectSong(songId) {
     audioElement.src = `/song/get/${songId}`;
     fetch(`/song/data/${songId}`)

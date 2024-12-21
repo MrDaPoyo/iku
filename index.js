@@ -77,7 +77,6 @@ app.get('/', loggedInMiddleware, (req, res) => {
     if (playlistId) {
         db.getPlaylistById(playlistId).then(async (playlist) => {
             if (playlist) {
-                console.log(playlist);
                 res.render('index', { title: 'Home', currentPlaylist: playlist });
             } else {
                 res.render('index', { title: 'Home', currentPlaylist: [] });
@@ -201,7 +200,6 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
             fs.unlinkSync(coverPath);
         }
     }
-    console.log(JSON.stringify(req.body));
     var { trackName, artist, album, year, genre } = req.body;
     const trackFile = req.files['trackFile'] ? req.files['trackFile'][0] : null;
     const coverFile = req.files['cover'] ? req.files['cover'][0] : null;
