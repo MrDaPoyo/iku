@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const playlists = await playlistsResponse.json();
 
         if (!songs.length && !playlists.length) {
-            const noTracks = document.createElement('h2');
+            const noTracks = document.createElement('h3');
             noTracks.textContent = 'No tracks or playlists found, try uploading or creating one first!';
             document.getElementById("trackContainer").appendChild(noTracks);
             return;

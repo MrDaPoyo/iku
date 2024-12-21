@@ -231,3 +231,11 @@ button:hover {
 input:required {
     border-color: var(--red);
 }
+
+@media screen and (max-width: 768px) {
+    .login {
+        max-width: 90vw;
+        height: 100%;
+        margin: auto;
+    }   
+}

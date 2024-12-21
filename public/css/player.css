@@ -83,8 +83,7 @@
     justify-content: flex-start;
     flex-grow: 1;
 }
-
-.dashboard .mainContainer .audioPlayerContainer {
+.audioPlayerContainer {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -97,6 +96,9 @@
     z-index: 10;
     height: 20%;
     overflow: hidden;
+    position: sticky;
+    bottom: 0;
+    left: 0;
 }
 
 .audioPlayerContainer h1,
