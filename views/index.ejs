@@ -40,7 +40,11 @@
                                 var trackItem = document.createElement('div');
                                 trackItem.className = 'trackItem';
                                 trackItem.setAttribute('data-index', currentPlaylist.tracks.indexOf(track));
-                                trackItem.innerHTML = `${data.title ? data.title : "No Title"} - ${data.artist ? data.artist : "Unknown"}<br>${data.plays ? data.plays : 0} plays`;
+                                trackItem.textContent = `${data.title ? data.title : "No Title"} - ${data.artist ? data.artist : "Unknown"}`;
+                                playlist_index = currentPlaylist.tracks.indexOf(track);
+                                if (data.id === playlist_index) {
+                                    trackItem.style.color = 'green';
+                                }
                                 trackListContainer.appendChild(trackItem);
                                 if (currentPlaylist.tracks.indexOf(track) === 0) {
                                     trackItem.classList.add('currentTrack');
