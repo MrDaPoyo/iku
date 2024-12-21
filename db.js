@@ -10,7 +10,7 @@ var db = new sqlite3.Database('iku.db', (err) => {
 });
 
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT, fav_genre TEXT)');
+    db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT, fav_genre TEXT, lastPlaylist INTEGER, lastPlaylistTrack INTEGER, lastTrack INTEGER)');
     db.run('CREATE TABLE IF NOT EXISTS tracks (id INTEGER PRIMARY KEY, title TEXT, artist TEXT, album TEXT, year INTEGER, genre TEXT, length INTEGER, user_id INTEGER, path TEXT UNIQUE NOT NULL, cover TEXT, FOREIGN KEY (user_id) REFERENCES users(id))');
     db.run('CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, content TEXT, post_id INTEGER, user_id INTEGER, FOREIGN KEY (post_id) REFERENCES posts(id), FOREIGN KEY (user_id) REFERENCES users(id))');
     db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY, name TEXT REQUIRED, description TEXT, user_id INTEGER, cover TEXT, FOREIGN KEY (user_id) REFERENCES users(id))');
