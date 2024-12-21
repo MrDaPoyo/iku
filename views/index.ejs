@@ -29,6 +29,11 @@
             <% if (typeof currentPlaylist !== 'undefined' && currentPlaylist) { %>
                 <script>
                     var currentPlaylist = <%- JSON.stringify(currentPlaylist) %>;
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var playlistIndex = urlParams.get('playlist_index');
+                    if (!playlistIndex) {
+                        playlistIndex = 0;
+                    }
                     var trackListContainer = document.createElement('div');
                     trackListContainer.className = 'trackListContainer w-25 h-100';
                     currentPlaylist.tracks.forEach(track => {
@@ -39,8 +44,6 @@
                                 trackItem.className = 'trackItem';
                                 trackItem.setAttribute('data-index', currentPlaylist.tracks.indexOf(track));
                                 trackItem.textContent = `${data.title ? data.title : "No Title"} - ${data.artist ? data.artist : "Unknown"}`;
-                                var urlParams = new URLSearchParams(window.location.search);
-                                var playlistIndex = urlParams.get('playlist_index');
                                 if (currentPlaylist.tracks.indexOf(track) == playlistIndex) {
                                     trackItem.style.color = 'green';
                                 }
