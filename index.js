@@ -230,7 +230,9 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
     }
 
     try {
-        coverPath = path.basename(coverPath);
+        if (coverPath) {
+            coverPath = path.basename(coverPath);
+        }
         const result = await db.registerTrack(trackName, artist, album, year, genre, userId, path.basename(trackPath), Math.round(length), coverPath);
         if (result) {
             console.log('Track submitted successfully');
@@ -247,7 +249,6 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
         res.status(500).send('Failed to submit track');
     }
 });
-
 
 app.get('/playlist/getPlaylistsByUser', loggedInMiddleware, (req, res) => {
     const userId = req.user.id;
@@ -266,9 +267,9 @@ app.get('/playlist/get/:id', async (req, res) => {
 });
 
 app.post('/playlist/create', loggedInMiddleware, async (req, res) => {
-    var { name, description } = req.body;
-    const userId = req.user.id;
-    const cover = req.body.cover || null;
+    var { name, description } = await req.body;
+    const userId = await req.user.id;
+    const cover = await req.body.cover || null;
     var description = description || "No description provided :P";
 
     if (!name) {

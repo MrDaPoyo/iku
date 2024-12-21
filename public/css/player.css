@@ -393,7 +393,7 @@
     margin: 10px;
 }
 
-.submitTrackButton {
+.submitTrackButton, .submitPlaylistButton {
     margin: 10px;
     padding: 5px;
     border: 1px solid var(--white);
@@ -405,7 +405,7 @@
     background-color: var(--black);
 }
 
-.submitTrackButton:hover {
+.submitTrackButton:hover, .submitPlaylistButton:hover {
     background-color: var(--white);
     color: var(--black);
     border: 1px solid var(--black);
