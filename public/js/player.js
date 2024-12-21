@@ -197,19 +197,37 @@ audioElement.addEventListener('pause', () => {
     clearInterval(currentTrackInterval);
 });
 
+var repeatButton = document.getElementById('repeatButton');
+var loop = false;
+
+repeatButton.addEventListener('click', () => {
+    loop = !loop;
+    if (loop) {
+        console.log('Looping enabled');
+        repeatButton.style.backgroundColor = 'var(--green)';
+    } else {
+        console.log('Looping disabled');
+        repeatButton.style.backgroundColor = '';
+    }
+});
+
 audioElement.addEventListener('ended', () => {
-    if (playlistId) {
-        fetch(`/playlist/get/${playlistId}/nextTrack`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Next track:', data);
-                if (data.id) {
-                    selectSong(data.id, playlistId, playlistIndex);
-                    audioElement.play();
-                } else {
-                    console.warn('No next track found');
-                }
-            })
-            .catch(error => console.error('Error fetching next track:', error));
+    if (!loop) {
+        if (playlistId) {
+            fetch(`/playlist/get/${playlistId}/nextTrack`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Next track:', data);
+                    if (data.id) {
+                        selectSong(data.id, playlistId, playlistIndex);
+                        audioElement.play();
+                    } else {
+                        console.warn('No next track found');
+                    }
+                })
+                .catch(error => console.error('Error fetching next track:', error));
+        }
+    } else {
+        audioElement.play();
     }
 });
