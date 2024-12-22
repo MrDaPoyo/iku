@@ -19,8 +19,8 @@ db.serialize(() => {
         if (err) {
             console.error(err.message);
         } else if (row.count === 0) {
-            db.run('INSERT INTO tracks (title, artist, album, year, genre, user_id, path, length) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
-                ['Sample Track No1', 'Sample Artist No1', 'Sample Album No1', 2024, 'Sample Genre', 1, "elevator-music-bossa-nova.mp3", 180], 
+            db.run('INSERT INTO tracks (title, artist, album, year, genre, user_id, path, length) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                ['Sample Track No1', 'Sample Artist No1', 'Sample Album No1', 2024, 'Sample Genre', 1, "elevator-music-bossa-nova.mp3", 180],
                 (err) => {
                     if (err) {
                         console.error(err.message);
@@ -35,7 +35,7 @@ db.serialize(() => {
         if (err) {
             console.error(err.message);
         } else if (row.count === 0) {
-            db.run('INSERT INTO playlists (name, description, user_id, cover) VALUES (?, ?, ?, ?)', ['Sample Playlist', 'A sample description for this sample playlist', 1, null], function(err) {
+            db.run('INSERT INTO playlists (name, description, user_id, cover) VALUES (?, ?, ?, ?)', ['Sample Playlist', 'A sample description for this sample playlist', 1, null], function (err) {
                 if (err) {
                     console.error(err.message);
                 } else {
@@ -207,7 +207,8 @@ function getPlaylistsByUser(user_id) {
                         resolve(rows);
                     }
                 }
-            )};
+                )
+            };
         });
     });
 }
@@ -237,13 +238,13 @@ function updateUserTrackStatus(userId, lastPlaylist, lastPlaylistTrack, lastTrac
             'UPDATE users SET lastPlaylist = COALESCE(?, lastPlaylist), lastPlaylistTrack = COALESCE(?, lastPlaylistTrack), lastTrack = COALESCE(?, lastTrack), lastTrackTime = COALESCE(?, lastTrackTime) WHERE id = ?',
             [lastPlaylist, lastPlaylistTrack, lastTrack, lastTrackTime, userId],
             (err) => {
-            if (err) {
-                console.warn(err.message);
-                reject(err.message);
-            } else {
-                console.log('User status updated successfully');
-                resolve(true);
-            }
+                if (err) {
+                    console.warn(err.message);
+                    reject(err.message);
+                } else {
+                    console.log('User status updated successfully');
+                    resolve(true);
+                }
             }
         );
     });
@@ -281,34 +282,21 @@ function getUserStatusByPlaylistId(userId, playlistId) {
 
 function addTrackToPlaylist(playlist_id, track_id) {
     return new Promise((resolve, reject) => {
-        db.run('INSERT INTO playlist_tracks (playlist_id, track_id) VALUES (?, ?)', [playlist_id, track_id], (err) => {
+        db.get('SELECT * FROM playlist_tracks WHERE playlist_id = ? AND track_id = ?', [playlist_id, track_id], (err, row) => {
             if (err) {
                 console.warn(err.message);
                 reject(err.message);
+            } else if (row) {
+                console.log('Track is already in the playlist');
+                resolve('Track is already in the playlist');
             } else {
-                console.log('Track added to playlist successfully');
-                resolve(true);
-            }
-        });
-    });
-}
-
-function getPlaylistById(id) {
-    return new Promise((resolve, reject) => {
-        db.get('SELECT * FROM playlists WHERE id = ?', [id], (err, row) => {
-            if (err) {
-                reject(false);
-            } else {
-                db.all('SELECT * FROM playlist_tracks WHERE playlist_id = ?', [id], (err, rows) => {
+                db.run('INSERT INTO playlist_tracks (playlist_id, track_id) VALUES (?, ?)', [playlist_id, track_id], (err) => {
                     if (err) {
-                        reject(false);
+                        console.warn(err.message);
+                        reject(err.message);
                     } else {
-                        if (row) {
-                            row.tracks = rows.map(row => row.track_id);
-                            resolve(row);
-                        } else {
-                            resolve(null);
-                        }
+                        console.log('Track added to playlist successfully');
+                        resolve(true);
                     }
                 });
             }
@@ -316,22 +304,45 @@ function getPlaylistById(id) {
     });
 }
 
+function getPlaylistById(id) {
+            return new Promise((resolve, reject) => {
+                db.get('SELECT * FROM playlists WHERE id = ?', [id], (err, row) => {
+                    if (err) {
+                        reject(false);
+                    } else {
+                        db.all('SELECT * FROM playlist_tracks WHERE playlist_id = ?', [id], (err, rows) => {
+                            if (err) {
+                                reject(false);
+                            } else {
+                                if (row) {
+                                    row.tracks = rows.map(row => row.track_id);
+                                    resolve(row);
+                                } else {
+                                    resolve(null);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
 module.exports = {
-    db,
-    registerUser,
-    loginUser,
-    comparePasswords,
-    checkUserById,
-    checkUserByUsername,
-    getTrackStatsByName,
-    getTrackStatsByPath,
-    getTracksByUser,
-    getTrackStatsById,
-    registerTrack,
-    getPlaylistsByUser,
-    createPlaylist,
-    addTrackToPlaylist,
-    getPlaylistById,
-    updateUserTrackStatus,
-    getUserStatusByPlaylistId
-};
+            db,
+            registerUser,
+            loginUser,
+            comparePasswords,
+            checkUserById,
+            checkUserByUsername,
+            getTrackStatsByName,
+            getTrackStatsByPath,
+            getTracksByUser,
+            getTrackStatsById,
+            registerTrack,
+            getPlaylistsByUser,
+            createPlaylist,
+            addTrackToPlaylist,
+            getPlaylistById,
+            updateUserTrackStatus,
+            getUserStatusByPlaylistId
+        };

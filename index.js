@@ -327,6 +327,20 @@ app.get('/playlist/get/:id/nextTrack', loggedInMiddleware, async (req, res) => {
     return res.json({ ...trackStats, playlistIndex: nextIndex });
 });
 
+app.post('/playlist/:id/addTrack', loggedInMiddleware, async (req, res) => {
+    const playlistId = req.params.id;
+    const trackId = req.body.trackId;
+    if (!trackId) {
+        return res.status(400).send('Please provide a track ID');
+    }
+    const result = await db.addTrackToPlaylist(playlistId, trackId);
+    if (result === true) {
+        res.status(200).send('Track added to playlist successfully');
+    } else {
+        res.status(400).send(result);
+    }
+});
+
 app.post('/playlist/create', loggedInMiddleware, async (req, res) => {
     var { name, description } = await req.body;
     const userId = await req.user.id;
