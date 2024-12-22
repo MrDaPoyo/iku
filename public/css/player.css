@@ -259,6 +259,8 @@
     width: 100%;
     border-bottom: 5px dashed var(--white);
     padding-bottom: auto;
+    display: flex;
+    flex-direction: column;
 }
 .audioPlayerData p {
     margin-bottom: 5px;
@@ -426,7 +428,8 @@
     }
 
     .dashboard .mainContainer .audioPlayerContainer {
-        flex-direction: column;
+        display: flex;
+        flex-direction: row;
         height: 20%;
         justify-content: center;
         align-items: center;
