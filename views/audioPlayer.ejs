@@ -46,8 +46,11 @@
         <p>Made by <strong id="title-artist">Loading Artist</strong></p>
     </div>
     <div class="audioPlayerControls">
-        <button id="playButton" onclick="togglePlayPause()"><img id="playPauseIcon" src="/images/icons/play.svg"
-                style="filter: invert(1);" value="0" max="100" step="0.01"></button>
+        <button id="pastButton"><img src="/images/icons/skip-backward.svg" style="filter: invert(1);"></button>
+        <button id="stopButton"><img src="/images/icons/stop.svg" style="filter: invert(1);" src='/images/icons/play.svg' ;"></button>
+        <button id="playButton" onclick="togglePlayPause()"><img id="playPauseIcon" src="/images/icons/play.svg" style="filter: invert(1);" value="0" max="100" step="0.01"></button>
+        <button id="repeatButton"><img src="/images/icons/repeat.svg" style="filter: invert(1);"></button>
+        <button id="nextButton"><img src="/images/icons/skip-forward.svg" style="filter: invert(1);"></button>
         <script>
             function togglePlayPause() {
                 var audioPlayer = document.getElementById('audioPlayer');
@@ -59,12 +62,6 @@
                 }
             }
         </script>
-        <button id="nextButton"><img src="/images/icons/skip-forward.svg" style="filter: invert(1);"></button>
-        <button id="pastButton"><img src="/images/icons/skip-backward.svg" style="filter: invert(1);"></button>
-        <button id="stopButton"><img src="/images/icons/stop.svg" style="filter: invert(1);"
-                src='/images/icons/play.svg' ;"></button>
-        <button id="repeatButton">
-            <img src="/images/icons/repeat.svg" style="filter: invert(1);"></button>
     </div>
 </div>
 <canvas id="audioVisualizer" class="audioPlayerVisualizer" height="100%"></canvas>
