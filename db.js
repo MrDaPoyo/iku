@@ -305,44 +305,79 @@ function addTrackToPlaylist(playlist_id, track_id) {
 }
 
 function getPlaylistById(id) {
-            return new Promise((resolve, reject) => {
-                db.get('SELECT * FROM playlists WHERE id = ?', [id], (err, row) => {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM playlists WHERE id = ?', [id], (err, row) => {
+            if (err) {
+                reject(false);
+            } else {
+                db.all('SELECT * FROM playlist_tracks WHERE playlist_id = ?', [id], (err, rows) => {
                     if (err) {
                         reject(false);
                     } else {
-                        db.all('SELECT * FROM playlist_tracks WHERE playlist_id = ?', [id], (err, rows) => {
-                            if (err) {
-                                reject(false);
-                            } else {
-                                if (row) {
-                                    row.tracks = rows.map(row => row.track_id);
-                                    resolve(row);
-                                } else {
-                                    resolve(null);
-                                }
-                            }
-                        });
+                        if (row) {
+                            row.tracks = rows.map(row => row.track_id);
+                            resolve(row);
+                        } else {
+                            resolve(null);
+                        }
                     }
                 });
-            });
-        }
+            }
+        });
+    });
+}
+
+function getFullPlaylistById(id) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT * FROM playlists WHERE id = ?', [id], (err, playlist) => {
+            if (err) {
+                reject(false);
+            } else {
+                db.all('SELECT * FROM playlist_tracks WHERE playlist_id = ?', [id], (err, playlist_tracks) => {
+                    if (err) {
+                        reject(false);
+                    } else {
+                        if (playlist) {
+                            const trackIds = playlist_tracks.map(track => track.track_id);
+                            db.all('SELECT * FROM tracks WHERE id IN (' + trackIds.join(',') + ')', (err, tracks) => {
+                                if (err) {
+                                    reject(false);
+                                } else {
+                                    playlist.tracks = tracks;
+                                    playlist.tracks = tracks.map((track, index) => ({
+                                        ...track,
+                                        index: index
+                                    }));
+                                    resolve(playlist);
+                                }
+                            });
+                        } else {
+                            resolve(null);
+                        }
+                    }
+                });
+            }
+        });
+    });
+}
 
 module.exports = {
-            db,
-            registerUser,
-            loginUser,
-            comparePasswords,
-            checkUserById,
-            checkUserByUsername,
-            getTrackStatsByName,
-            getTrackStatsByPath,
-            getTracksByUser,
-            getTrackStatsById,
-            registerTrack,
-            getPlaylistsByUser,
-            createPlaylist,
-            addTrackToPlaylist,
-            getPlaylistById,
-            updateUserTrackStatus,
-            getUserStatusByPlaylistId
-        };
+    db,
+    registerUser,
+    loginUser,
+    comparePasswords,
+    checkUserById,
+    checkUserByUsername,
+    getTrackStatsByName,
+    getTrackStatsByPath,
+    getTracksByUser,
+    getTrackStatsById,
+    registerTrack,
+    getPlaylistsByUser,
+    createPlaylist,
+    addTrackToPlaylist,
+    getPlaylistById,
+    getFullPlaylistById,
+    updateUserTrackStatus,
+    getUserStatusByPlaylistId
+};

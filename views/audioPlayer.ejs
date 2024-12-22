@@ -2,6 +2,39 @@
     <source src="" type="audio/mpeg">
     Your browser does not support audio.
 </audio>
+<% if (typeof playlist !== 'undefined' && playlist) { %>
+    <ul class="currentPlaylist">
+        <h3><%= playlist.name %></h3>
+        <li id="nextTrack">
+            <p>Loading next track...</p>
+        </li>
+        <script>
+            fetch(`/playlist/get/<%= playlist.id %>/nextTrack`)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                const nextTrackElement = document.getElementById('nextTrack');
+                const trackTitle = document.createElement('p');
+                trackTitle.textContent = data.title;
+                trackTitle.onclick = function() {
+                    selectSong(data.id, '<%= playlist.id %>', data.playlistIndex);
+                };
+                const trackArtist = document.createElement('small');
+                trackArtist.textContent = data.artist;
+                nextTrackElement.innerHTML = '';
+                nextTrackElement.appendChild(trackTitle);
+                nextTrackElement.appendChild(trackArtist);
+                } else {
+                document.getElementById('nextTrack').innerHTML = '<p>No next track available</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching next track:', error);
+                document.getElementById('nextTrack').innerHTML = '<p>Error loading next track</p>';
+            });
+        </script>
+    </ul>
+<% } %>
 <div class="w-100 column-container">
     <div class="audioPlayerData">
         <div class="title-progress-container">

@@ -71,23 +71,22 @@ app.use(cookieParser());
 
 app.use(generalMiddleware);
 
-// Define a route
 app.get('/', loggedInMiddleware, (req, res) => {
     const playlistId = req.query.playlist_id;
     if (playlistId) {
-        db.getPlaylistById(playlistId).then((result) => {
+        db.getFullPlaylistById(playlistId).then(async (result) => {
             if (result) {
                 let playlistIndex = parseInt(req.query.playlist_index) || 0;
                 if (playlistIndex >= result.tracks.length) {
                     playlistIndex = 0;
                 }
-                res.render('index', { title: 'Home', playlist: result, playlistIndex: playlistIndex });
+                return res.render('index', { title: 'Home', playlist: await result, playlistIndex: playlistIndex });
             } else {
-                res.redirect('/');
+                return res.redirect('/');
             }
         });
     } else {
-        res.render('index', { title: 'Home' });
+        return res.render('index', { title: 'Home', playlist: null }); 
     }
 });
 
