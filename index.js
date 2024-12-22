@@ -306,24 +306,14 @@ app.get('/playlist/get/:id/nextTrack', loggedInMiddleware, async (req, res) => {
     if (!playlist) {
         return res.status(404).send('Playlist not found');
     }
-    const trackIndex = await db.getUserStatusByPlaylistId(playlistId);
-    if (!trackIndex) {
-        return res.status(404).send('Track not found');
-    }
-    const nextIndex = trackIndex + 1;
-    if (nextIndex >= playlist.tracks.length) {
-        return res.status(404).send('Track not found');
-    }
-    var songId = playlist.tracks[nextIndex];
-    if (!songId) {
-        songId = playlist.tracks[0];
-    }
-    const trackStats = await db.getTrackStatsById(songId);
-    if (!trackStats) {
-        return res.status(404).send('Track not found');
-    }
-    db.updateUserTrackStatus(req.user.id, songId, playlistId, songId, nextIndex);
-    return res.json({ ...trackStats, playlistIndex: nextIndex });
+    const userStatus = await db.getUserStatusByPlaylistId(playlistId);
+    var lastTrackIndex = userStatus && userStatus.user.lastPlaylistTrack ? userStatus.user.lastPlaylistTrack : 0;
+    console.log(lastTrackIndex);
+    lastTrackIndex = (lastTrackIndex + 1) % playlist.tracks.length;
+    console.log(lastTrackIndex);
+    const track = await db.getTrackStatsById(playlist.tracks[lastTrackIndex]);
+    db.updateUserTrackStatus(req.user.id, playlistId, lastTrackIndex, track.id, 0);
+    return res.json({ lastTrackIndex, track });
 });
 
 app.get('/playlist/get/:id/previousTrack', loggedInMiddleware, async (req, res) => {
@@ -332,24 +322,15 @@ app.get('/playlist/get/:id/previousTrack', loggedInMiddleware, async (req, res) 
     if (!playlist) {
         return res.status(404).send('Playlist not found');
     }
-    const trackIndex = await db.getUserStatusByPlaylistId(playlistId);
-    if (!trackIndex) {
-        return res.status(404).send('Track not found');
+    const userStatus = await db.getUserStatusByPlaylistId(playlistId);
+    let lastTrackIndex = userStatus && userStatus.user.lastPlaylistTrack ? userStatus.user.lastPlaylistTrack : 0;
+    lastTrackIndex = (lastTrackIndex - 1) % playlist.tracks.length;
+    if (lastTrackIndex < 0) {
+        lastTrackIndex = playlist.tracks.length - 1;
     }
-    const previousIndex = trackIndex - 1;
-    if (previousIndex < 0) {
-        return res.status(404).send('Track not found');
-    }
-    var songId = playlist.tracks[previousIndex];
-    if (!songId) {
-        songId = playlist.tracks[0];
-    }
-    const trackStats = await db.getTrackStatsById(songId);
-    if (!trackStats) {
-        return res.status(404).send('Track not found');
-    }
-    db.updateUserTrackStatus(req.user.id, songId, playlistId, songId, previousIndex);
-    return res.json({ ...trackStats, playlistIndex: previousIndex });
+    const track = await db.getTrackStatsById(playlist.tracks[lastTrackIndex]);
+    db.updateUserTrackStatus(req.user.id, playlistId, lastTrackIndex, track.id, 0);
+    return res.json({ lastTrackIndex, track });
 });
 
 app.post('/playlist/:id/addTrack', loggedInMiddleware, async (req, res) => {

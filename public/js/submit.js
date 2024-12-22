@@ -220,7 +220,7 @@ document.getElementById('submitPlaylistButton').addEventListener('click', functi
                 .then(result => {
                     if (result) {
                         alert(result);
-
+                        window.location.reload();
                     }
                 })
                 .catch(error => {

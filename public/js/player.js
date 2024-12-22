@@ -179,26 +179,16 @@ document.getElementById('nextButton').addEventListener('click', () => {
         fetch(`/playlist/get/${playlistId}/nextTrack`)
             .then(response => response.json())
             .then(data => {
-                if (data) {
-                    const nextTrackElement = document.getElementById('nextTrack');
-                    const trackTitle = document.createElement('p');
-                    trackTitle.textContent = data.title;
-                    trackTitle.onclick = function() {
-                        selectSong(data.id, playlistId, data.playlistIndex);
-                    };
-                    const trackArtist = document.createElement('small');
-                    trackArtist.textContent = data.artist;
-                    nextTrackElement.innerHTML = '';
-                    nextTrackElement.appendChild(trackTitle);
-                    nextTrackElement.appendChild(trackArtist);
+                console.log('Next track:', data);
+                if (data.track && data.track.id) {
+                    playlistIndex = data.lastTrackIndex;
+                    selectSong(data.track.id, playlistId, playlistIndex);
+                    audioElement.play();
                 } else {
-                    document.getElementById('nextTrack').innerHTML = '<p>No next track available</p>';
+                    console.warn('No next track found');
                 }
             })
-            .catch(error => {
-                console.error('Error fetching next track:', error);
-                document.getElementById('nextTrack').innerHTML = '<p>Error loading next track</p>';
-            });
+            .catch(error => console.error('Error fetching next track:', error));
     }
 });
 
@@ -207,28 +197,19 @@ document.getElementById('pastButton').addEventListener('click', () => {
         fetch(`/playlist/get/${playlistId}/previousTrack`)
             .then(response => response.json())
             .then(data => {
-                if (data) {
-                    const pastTrackElement = document.getElementById('pastTrack');
-                    const trackTitle = document.createElement('p');
-                    trackTitle.textContent = data.title;
-                    trackTitle.onclick = function() {
-                        selectSong(data.id, playlistId, data.playlistIndex);
-                    };
-                    const trackArtist = document.createElement('small');
-                    trackArtist.textContent = data.artist;
-                    pastTrackElement.innerHTML = '';
-                    pastTrackElement.appendChild(trackTitle);
-                    pastTrackElement.appendChild(trackArtist);
+                console.log('Previous track:', data);
+                if (data.track && data.track.id) {
+                    playlistIndex = data.lastTrackIndex;
+                    selectSong(data.track.id, playlistId, data.lastTrackIndex);
+                    audioElement.play();
                 } else {
-                    document.getElementById('pastTrack').innerHTML = '<p>No previous track available</p>';
+                    console.warn('No previous track found');
                 }
             })
-            .catch(error => {
-                console.error('Error fetching previous track:', error);
-                document.getElementById('pastTrack').innerHTML = '<p>Error loading previous track</p>';
-            });
+            .catch(error => console.error('Error fetching previous track:', error));
     }
 });
+
 let currentTrackInterval;
 
 audioElement.addEventListener('pause', () => {

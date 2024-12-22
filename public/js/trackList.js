@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const card = document.createElement('div');
             card.className = 'track';
+            card.draggable = true;
+            card.dataset.trackId = song.id;
             card.innerHTML = `
                 <a href="/?track_id=${song.id}" class="track-link">
                     <img class="track-image" src="${song.cover ? `/song/getCover/${song.id}` : 'https://placehold.co/300'}" alt="${song.title}">
@@ -37,12 +39,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3 class="track-duration">${formattedLength}</h3>
                 </div>
             `;
+            card.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData('text/plain', song.id);
+            });
             document.getElementById("trackContainer").appendChild(card);
         });
 
         playlists.forEach(async playlist => {
             const card = document.createElement('div');
             card.className = 'playlistItem';
+            card.dataset.playlistId = playlist.id;
             const trackTitles = await Promise.all(playlist.tracks.map(async trackId => {
                 const response = await fetch(`/song/data/${trackId}`);
                 const track = await response.json();
@@ -59,6 +65,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </a>
             `;
+            card.addEventListener('dragover', (event) => {
+                event.preventDefault();
+            });
+            card.addEventListener('drop', async (event) => {
+                event.preventDefault();
+                const trackId = event.dataTransfer.getData('text/plain');
+                const playlistId = playlist.id;
+
+                await fetch(`/playlist/${playlistId}/addTrack`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ trackId })
+                });
+
+                const trackResponse = await fetch(`/song/data/${trackId}`);
+                const track = await trackResponse.json();
+                const trackTitlesElement = card.querySelector('.playlist-tracks');
+                trackTitlesElement.textContent += `, ${track.title}`;
+            });
             document.getElementById("playlistContainer").appendChild(card);
         });
     } catch (error) {
