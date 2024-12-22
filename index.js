@@ -326,6 +326,32 @@ app.get('/playlist/get/:id/nextTrack', loggedInMiddleware, async (req, res) => {
     return res.json({ ...trackStats, playlistIndex: nextIndex });
 });
 
+app.get('/playlist/get/:id/previousTrack', loggedInMiddleware, async (req, res) => {
+    const playlistId = req.params.id;
+    const playlist = await db.getPlaylistById(playlistId);
+    if (!playlist) {
+        return res.status(404).send('Playlist not found');
+    }
+    const trackIndex = await db.getUserStatusByPlaylistId(playlistId);
+    if (!trackIndex) {
+        return res.status(404).send('Track not found');
+    }
+    const previousIndex = trackIndex - 1;
+    if (previousIndex < 0) {
+        return res.status(404).send('Track not found');
+    }
+    var songId = playlist.tracks[previousIndex];
+    if (!songId) {
+        songId = playlist.tracks[0];
+    }
+    const trackStats = await db.getTrackStatsById(songId);
+    if (!trackStats) {
+        return res.status(404).send('Track not found');
+    }
+    db.updateUserTrackStatus(req.user.id, songId, playlistId, songId, previousIndex);
+    return res.json({ ...trackStats, playlistIndex: previousIndex });
+});
+
 app.post('/playlist/:id/addTrack', loggedInMiddleware, async (req, res) => {
     const playlistId = req.params.id;
     const trackId = req.body.trackId;
