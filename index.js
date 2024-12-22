@@ -90,6 +90,21 @@ app.get('/', loggedInMiddleware, (req, res) => {
     }
 });
 
+app.get('/playlist', loggedInMiddleware, (req, res) => {
+    const playlistId = req.query.playlist_id;
+    if (playlistId) {
+        db.getFullPlaylistById(playlistId).then(async (result) => {
+            if (result) {
+                return res.render('playlistView', { title: 'Playlist', playlist: await result });
+            } else {
+                return res.redirect('/');
+            }
+        });
+    } else {
+        return res.redirect('/');
+    }
+});
+
 app.get('/auth/login', notLoggedInMiddleware, (req, res) => {
     res.render('login', { title: 'Login' });
 });
@@ -235,7 +250,7 @@ app.post('/song/submit', loggedInMiddleware, upload.fields([{ name: 'trackFile',
     const userId = req.user.id;
     if (isNaN(year) || isNaN(length)) {
         removeTrackFiles(trackPath, coverPath);
-        console.log('Year abd length must be numbers');
+        console.log('Year and length must be numbers');
         return res.status(400).send('Year and length must be numbers');
     }
     if (typeof userId !== 'number') {
@@ -308,9 +323,7 @@ app.get('/playlist/get/:id/nextTrack', loggedInMiddleware, async (req, res) => {
     }
     const userStatus = await db.getUserStatusByPlaylistId(playlistId);
     var lastTrackIndex = userStatus && userStatus.user.lastPlaylistTrack ? userStatus.user.lastPlaylistTrack : 0;
-    console.log(lastTrackIndex);
     lastTrackIndex = (lastTrackIndex + 1) % playlist.tracks.length;
-    console.log(lastTrackIndex);
     const track = await db.getTrackStatsById(playlist.tracks[lastTrackIndex]);
     db.updateUserTrackStatus(req.user.id, playlistId, lastTrackIndex, track.id, 0);
     return res.json({ lastTrackIndex, track });
