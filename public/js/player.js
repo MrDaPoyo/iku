@@ -242,17 +242,18 @@ audioElement.addEventListener('ended', () => {
     if (!loop) {
         if (playlistId) {
             fetch(`/playlist/get/${playlistId}/nextTrack`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Next track:', data);
-                    if (data.id) {
-                        selectSong(data.id, playlistId, playlistIndex);
-                        audioElement.play();
-                    } else {
-                        console.warn('No next track found');
-                    }
-                })
-                .catch(error => console.error('Error fetching next track:', error));
+            .then(response => response.json())
+            .then(data => {
+                console.log('Next track:', data);
+                if (data.track && data.track.id) {
+                    playlistIndex = data.lastTrackIndex;
+                    selectSong(data.track.id, playlistId, playlistIndex);
+                    audioElement.play();
+                } else {
+                    console.warn('No next track found');
+                }
+            })
+            .catch(error => console.error('Error fetching next track:', error));
         }
     } else {
         audioElement.play();
