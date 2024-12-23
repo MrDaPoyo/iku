@@ -56,12 +56,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }));
 
             card.innerHTML = `
-                <a href="/?playlist_id=${playlist.id}" class="playlist-link">
-                    <img class="playlist-image" src="${playlist.cover ? `/playlist/getCover/${playlist.id}` : 'https://placehold.co/300'}" alt="${playlist.title}">
-                    <div class="playlist-info">
-                        <h3 class="playlist-title">${playlist.name}</h3>
-                        <p class="playlist-description">${playlist.description}</p>
-                        <small class="playlist-tracks">${trackTitles.join(', ')}</small>
+                <a href="/?playlist_id=${playlist.id}" class="track-link">
+                    <img class="track-image" src="${playlist.cover ? `/playlist/getCover/${playlist.id}` : 'https://placehold.co/300'}" alt="${playlist.title}">
+                    <div class="track-info">
+                        <h3 class="track-title">${playlist.name}</h3>
+                        <p class="track-description">${playlist.description}</p>
+                        <small class="track-tracks">${trackTitles.join(', ')}</small>
                     </div>
                 </a>
             `;
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const trackResponse = await fetch(`/song/data/${trackId}`);
                 const track = await trackResponse.json();
-                const trackTitlesElement = card.querySelector('.playlist-tracks');
+                const trackTitlesElement = card.querySelector('.track-tracks');
                 trackTitlesElement.textContent += `, ${track.title}`;
             });
             document.getElementById("playlistContainer").appendChild(card);

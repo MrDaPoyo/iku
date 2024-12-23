@@ -388,29 +388,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.playlist-image {
-    width: 50%;
-    height: auto;
-    resize: both;
-    flex-shrink: 1;
-    border-radius: 8px;
-}
-
-.playlist-info {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.playlist-title {
-    font-size: 1.5em;
-    margin: 0;
-}
-
-.playlist-description {
-    font-size: 1em;
-    color: #666;
-}
-
 .trackContainer,
 .playlistContainer {
     padding: 20px;
@@ -484,22 +461,12 @@
         width: 100%;
     }
 
-    .playlistItem,
-    .playlist-link {
+    .playlistItem {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
         font-size: 0.8rem;
         width: 100%;
-    }
-
-    .playlist-image {
-        width: auto;
-        height: 100%;
-        max-height: 8vh;
-        flex-shrink: 0;
-        border-radius: 8px;
-        margin-right: 10px;
     }
 
     .audioPlayerVisualizer,
