@@ -5,6 +5,7 @@
     --blue: #0C85EC;
     --white: #FAF9F6;
     --light-grey: #F5F5F5;
+    --dark-grey: #808080;
     --black: #1E1E1E;
 }
 
@@ -22,26 +23,27 @@
     align-items: flex-start;
     justify-content: center;
     background-color: var(--light-grey);
-    color: var(--light-grey);
+    color: var(--black);
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
     width: 100%;
 }
 
-.playlistContainer h2 {
-    color: var(--green);
+.playlistContainer h3 {
+    color: var(--black);
 }
 
 .trackItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #181818;
-    color: #fff;
+    flex-direction: row;
+    background-color: var(--black);
+    color: var(--white);
     padding: 10px;
-    border-radius: 5px;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 .trackInfo {
@@ -51,28 +53,24 @@
 
 .trackTitleArtist {
     margin-right: 10px;
-    font-size: 16px;
-    font-weight: bold;
+    padding: 10px;
 }
 
-.trackTitleArtist h2 {
+.trackTitleArtist h3 {
     margin: 0;
-    font-size: 16px;
-    font-weight: bold;
     display: inline;
+    color: var(--white);
 }
 
 .trackTitleArtist strong {
     font-weight: 600;
-    font-size: 14px;
-    color: #808080;
+    color: var(--dark-grey);
 }
 
 .trackMetadata {
     display: flex;
     align-items: center;
-    font-size: 14px;
-    color: #808080;
+    color: var(--dark-grey);
 }
 
 .trackAlbum {
