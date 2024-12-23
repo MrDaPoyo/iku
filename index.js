@@ -188,7 +188,7 @@ app.get('/song/getCover/:id', async (req, res) => {
     if (!trackStats) {
         return res.status(404).send('Song not found');
     }
-    const coverPath = path.join('covers', await trackStats.cover);
+    const coverPath = path.join('covers', await trackStats.cover || 'default.jpg');
     if (fs.existsSync(coverPath)) {
         res.sendFile(path.resolve(coverPath));
     } else {

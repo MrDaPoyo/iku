@@ -19,19 +19,17 @@
                 </p>
                 <div class="tracksContainer">
                     <% playlist.tracks.forEach(function(track) { %>
-                        <div class="trackItem">
-                            <div class="trackInfo">
-                                <span class="trackTitleArtist">
-                                    <h3><%= track.title %></h3> - <strong><%= track.artist %></strong>
-                                </span>
-                            </div>
-                            <div class="trackMetadata">
-                                <small class="trackAlbum">
-                                    <%= track.album %>
-                                </small>
-                                <span class="trackLength">
+                        <div class="track">
+                            <img src="/song/getCover/<%= track.id %>" alt="Track Image" class="track-image">
+                            <div class="track-info">
+                                <a href="<%= track.link %>" class="track-link">
+                                    <h3 class="track-title"><%= track.title %></h3>
+                                    <p class="track-artist"><strong><%= track.artist %></strong></p>
+                                </a>
+                                <p class="track-album"><%= track.album %></p>
+                                <p class="track-duration">
                                     <%= Math.floor(track.length / 60) %>:<%= ('0' + track.length % 60).slice(-2) %>
-                                </span>
+                                </p>
                             </div>
                         </div>
                     <% }); %>
