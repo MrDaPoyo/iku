@@ -20,6 +20,7 @@
                 <div class="tracksContainer">
                     <% playlist.tracks.forEach(function(track) { %>
                         <div class="track">
+                            <span class="track-number"><%= track.index + 1 %></span>
                             <img src="/song/getCover/<%= track.id %>" alt="Track Image" class="track-image">
                             <div class="track-info">
                                 <a href="<%= track.link %>" class="track-link">

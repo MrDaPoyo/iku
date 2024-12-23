@@ -19,7 +19,8 @@
 .playlistContainer,
 .tracksContainer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: center;
     background-color: var(--light-grey);
@@ -45,6 +46,15 @@
     border-radius: 10px;
     cursor: pointer;
     min-width: 10vw;
+    min-height: 12vh;
+    position: relative;
+}
+
+.track-number {
+    font-size: 100%;
+    font-weight: bold;
+    color: #fff !important;
+    margin: 0;
 }
 
 .track-image {
