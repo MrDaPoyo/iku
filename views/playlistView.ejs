@@ -11,29 +11,30 @@
         <div class="mainContainer">
             <div class="contentContainer">
                 <div class="playlistContainer">
-                    <h2>
+                    <h2 class="playlistName">
                         <%= playlist.name %>
                     </h2>
-                    <p>
+                    <p class="playlistDescription"></p>
                         <%= playlist.description %>
                     </p>
                     <div class="tracksContainer">
                         <% playlist.tracks.forEach(function(track) { %>
                             <div class="trackItem">
                                 <div class="trackInfo">
-                                    <span><h2><%= track.title %></h2> - By <strong><%= track.artist %></strong></span>
+                                    <span class="trackTitleArtist"><h2><%= track.title %></h2> - By <strong><%= track.artist %></strong></span>
                                 </div>
                                 <div class="trackMetadata">
-                                    <small>
+                                    <small class="trackAlbum">
                                         <%= track.album %>
                                     </small>
-                                    <%= Math.floor(track.length / 60) %>:<%= ('0' + track.length % 60).slice(-2) %><br>
+                                    <span class="trackLength">
+                                        <%= Math.floor(track.length / 60) %>:<%= ('0' + track.length % 60).slice(-2) %>
+                                    </span>
                                 </div>
                             </div>
-                            <% }); %>
+                        <% }); %>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
     <div class="audioPlayerContainer">

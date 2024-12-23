@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }));
 
             card.innerHTML = `
-                <a href="/?playlist_id=${playlist.id}" class="track-link">
+                <a href="/playlist?playlist_id=${playlist.id}" class="track-link">
                     <img class="track-image" src="${playlist.cover ? `/playlist/getCover/${playlist.id}` : 'https://placehold.co/300'}" alt="${playlist.title}">
                     <div class="track-info">
                         <h3 class="track-title">${playlist.name}</h3>

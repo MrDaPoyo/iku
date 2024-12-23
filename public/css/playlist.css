@@ -15,7 +15,8 @@
     border-radius: 10px;
 }
 
-.playlistContainer, .tracksContainer {
+.playlistContainer,
+.tracksContainer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -34,35 +35,50 @@
 
 .trackItem {
     display: flex;
-    align-items: center;
-    flex-direction: row;
-    background-color: var(--black);
-    color: var(--light-grey);
-    padding: 10px;
-    margin-bottom: 20px; 
-    border-radius: 5px;
-    width: 100%;
-}
-
-.trackItem .trackInfo {
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
-    width: 100%;
-}
-
-.trackItem .trackInfo strong {
-    color: var(--blue);
-}
-
-.trackItem .trackInfo small {
-    color: var(--red);
-}
-.trackItem .trackMetadata {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: space-between;
-    height: 100%;
-    width: auto;
+    align-items: center;
+    background-color: #181818;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.trackInfo {
+    display: flex;
+    align-items: center;
+}
+
+.trackTitleArtist {
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.trackTitleArtist h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    display: inline;
+}
+
+.trackTitleArtist strong {
+    font-weight: 600;
+    font-size: 14px;
+    color: #808080;
+}
+
+.trackMetadata {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #808080;
+}
+
+.trackAlbum {
+    margin-right: 10px;
+}
+
+.trackLength {
+    margin-right: 10px;
 }
