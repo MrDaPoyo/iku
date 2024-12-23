@@ -23,10 +23,12 @@
                                 <div class="trackInfo">
                                     <span><h2><%= track.title %></h2> - By <strong><%= track.artist %></strong></span>
                                 </div>
+                                <div class="trackMetadata">
                                     <small>
-                                        <%= track.album %> - <%= track.year %>
-                                    </small><br>
+                                        <%= track.album %>
+                                    </small>
                                     <%= Math.floor(track.length / 60) %>:<%= ('0' + track.length % 60).slice(-2) %><br>
+                                </div>
                             </div>
                             <% }); %>
                     </div>
