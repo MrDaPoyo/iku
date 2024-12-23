@@ -192,7 +192,7 @@ app.get('/song/getCover/:id', async (req, res) => {
     if (fs.existsSync(coverPath)) {
         res.sendFile(path.resolve(coverPath));
     } else {
-        res.status(404).send('Cover not found');
+        res.status(404).sendFile(path.resolve('public/images/no-cover.jpg'));
     }
 });
 

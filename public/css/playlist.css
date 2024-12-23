@@ -40,7 +40,8 @@
     gap: 5px;
     padding: 10px;
     margin: 4px;
-    background-color: #181818;
+    background-color: var(--black);
+    color: var(--white);
     border-radius: 10px;
     cursor: pointer;
     min-width: 10vw;
@@ -61,13 +62,13 @@
 .track-title {
     font-size: 14px;
     font-weight: bold;
-    color: #fff;
+    color: #fff !important;
     margin: 0;
 }
 
 .track-artist {
     font-size: 12px;
-    color: #aaa;
+    color: #aaa !important;
     margin: 0;
 }
 
@@ -77,7 +78,7 @@
 
 .track-date {
     font-size: 12px;
-    color: #aaa;
+    color: #aaa !important;
     margin: 0;
 }
 
