@@ -11,15 +11,21 @@
     <div class="mainContainer">
         <div class="contentContainer">
             <div class="playlistContainer">
-                <h2 class="playlistName">
-                    <%= playlist.name %>
-                </h2>
-                <p class="playlistDescription">
-                    <%= playlist.description %>
-                </p>
+                <div class="playlistData">
+                <div class="playlistImageContainer">
+                    <img src="/playlist/getCover/<%= playlist.id %>" alt="Playlist Image" class="playlistImage">
+                </div>
+                
+                    <h2 class="playlistName">
+                        <%= playlist.name %>
+                        </h2>
+                    <p class="playlistDescription">
+                        <%= playlist.description %>
+                    </p>
+                    </div>
                 <div class="tracksContainer">
                     <% playlist.tracks.forEach(function(track) { %>
-                        <div class="track">
+                        <div class="track" onmouseover="document.getElementById('track-options-<%= track.id %>').style.opacity = 1" onmouseleave="document.getElementById('track-options-<%= track.id %>').style.opacity = 0" onclick="selectSong(<%= track.id %>, <%= playlist.id %>, <%= track.index %>)">
                             <span class="track-number"><%= track.index + 1 %></span>
                             <img src="/song/getCover/<%= track.id %>" alt="Track Image" class="track-image">
                             <div class="track-info">
@@ -31,6 +37,14 @@
                                 <p class="track-duration">
                                     <%= Math.floor(track.length / 60) %>:<%= ('0' + track.length % 60).slice(-2) %>
                                 </p>
+                            </div>
+                            <div class="track-options" id="track-options-<%= track.id %>">
+                                <a href="/song/get/<%= track.id %>" class="track-option">
+                                    ⬇️
+                                </a>
+                                <a onclick="selectSong(<%= track.id %>, <%= playlist.id %>, <%= track.index %>)" class="track-option">
+                                    ▶
+                                </a>
                             </div>
                         </div>
                     <% }); %>
