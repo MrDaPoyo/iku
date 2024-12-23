@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.addEventListener('dragstart', (event) => {
                 event.dataTransfer.setData('text/plain', song.id);
             });
-            document.getElementById("trackContainer").appendChild(card);
+            document.getElementById("actualTrackContainer").appendChild(card);
         });
 
         playlists.forEach(async playlist => {

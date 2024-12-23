@@ -93,6 +93,7 @@ document.getElementById('submitTrackButton').addEventListener('click', function 
         // Close modal function
         document.getElementById('closePlaylistModalButton').addEventListener('click', function () {
             document.body.removeChild(modal);
+            document.body.removeChild(overlay);
             trackOpenModal = false;
         });
 
