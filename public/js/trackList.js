@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <img class="track-image" src="${song.cover ? `/song/getCover/${song.id}` : 'https://placehold.co/300'}" alt="${song.title}">
                     <div class="track-info">
                         <h2 class="track-title">${song.title}</h2>
-                        <p class="track-artist"><strong>${song.artist}</strong> - ${song.album}</p>
+                        <p class="track-artist"><strong>${song.artist}</strong> - ${song.album || "No album"}</p>
                     </div>
                 </a>
                 <div>
