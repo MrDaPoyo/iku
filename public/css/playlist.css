@@ -17,18 +17,23 @@
 }
 
 .playlistContainer,
-.tracksContainer {
+.tracksContainer, 
+.sidePlaylistContainer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
     background-color: var(--light-grey);
     color: var(--black);
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
     width: 100%;
+}
+
+.sidePlaylistContainer {
+    width: 30%;
 }
 
 .playlistContainer h3 {
@@ -70,15 +75,12 @@
 }
 
 .track-title {
-    font-size: 14px;
-    font-weight: bold;
-    color: #fff !important;
+    color: var(--white) !important;
     margin: 0;
 }
 
 .track-artist {
-    font-size: 12px;
-    color: #aaa !important;
+    color: var(--dark-grey) !important;
     margin: 0;
 }
 
@@ -88,19 +90,19 @@
 
 .track-date {
     font-size: 12px;
-    color: #aaa !important;
+    color: var(--dark-grey) !important;
     margin: 0;
 }
 
 .track-duration {
     font-size: 12px;
-    color: #aaa;
+    color: var(--dark-grey) !important;
     margin: 0;
 }
 
 .track-link {
     text-decoration: none;
-    color: #fff;
+    color: var(--white);
     width: 100%;
 }
 
