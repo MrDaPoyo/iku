@@ -75,6 +75,10 @@
 }
 
 .track-title {
+<<<<<<< HEAD
+=======
+    font-weight: bold;
+>>>>>>> 64ffeee (better)
     color: var(--white) !important;
     margin: 0;
 }
@@ -89,14 +93,21 @@
 }
 
 .track-date {
+<<<<<<< HEAD
     font-size: 12px;
+=======
+>>>>>>> 64ffeee (better)
     color: var(--dark-grey) !important;
     margin: 0;
 }
 
 .track-duration {
+<<<<<<< HEAD
     font-size: 12px;
     color: var(--dark-grey) !important;
+=======
+    color: var(--dark-grey);
+>>>>>>> 64ffeee (better)
     margin: 0;
 }
 
